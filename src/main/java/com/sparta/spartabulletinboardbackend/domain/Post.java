@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,13 +24,16 @@ public class Post {
     private String author;
     private String password;
     private String description;
-    private Date createdDate;
 
-    public Post(String title, String author, String password, String description, Date createdDate) {
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    public Post(String title, String author, String password, String description) {
         this.title = title;
         this.author = author;
         this.password = password;
         this.description = description;
-        this.createdDate = createdDate;
     }
 }
