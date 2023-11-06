@@ -53,7 +53,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException(""));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
 
         postRepository.delete(post);
     }

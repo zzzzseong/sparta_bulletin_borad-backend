@@ -45,7 +45,7 @@ public class PostController {
         postService.deletePost(postId);
     }
 
-    @PostMapping("/password/{postId}")
+    @GetMapping("/password/{postId}")
     public boolean validatePassword(@PathVariable(name = "postId") Long postId,
                                     @RequestParam(name = "password") String password) {
         return postService.validatePassword(postId, password);

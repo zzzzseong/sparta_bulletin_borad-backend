@@ -6,7 +6,7 @@
 <br>
 
 # Use-Case Diagram
-![sparta_bulletin_borad_usecase.png](image%2FREADME%2Fsparta_bulletin_borad_usecase.png)
+<img src="./image/README/sparta_bulletin_borad_usecase.png" height="500">
 
 <br>
 
@@ -44,16 +44,16 @@
 <br>
 
 # API Specification
-| Domain | Feature     |  Method  | URL                         | Request                                                                           | Response                                                                                                            | Exception | Description |
-|:------:|:------------|:--------:|-----------------------------|-----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|-----------|-------------|
-|  Post  | 게시글 작성      |  `POST`  | /api/post                   | { title: String<br/>author: String<br/>password: String<br/>description: String } | { title: String<br/>author: String<br/>description: String<br/>createdAt: String }                                  |           |             |
-|  Post  | 게시글 목록 조회   |  `GET`   | /api/post                   |                                                                                   | {{<br/> postId: Long<br/>title: String<br/>author: String<br/>description: String<br/>createdAt: String<br/>}, ...} |           |             |
-|  Post  | 게시글 단건 조회   |  `GET`   | /api/post/{postId}          |                                                                                   | { title: String<br/>author: String<br/>description: String<br/>createdAt: String }                                  |           |             |
-|  Post  | 게시글 수정      |  `PUT`   | /api/post/{postId}          | { title: String<br/>author: String<br/>description: String }                      | { title: String<br/>author: String<br/>description: String<br/>createdAt: String }                                  |           |             |
-|  Post  | 게시글 삭제      | `DELETE` | /api/post/{postId}          |                                                                                   |                                                                                                                     |           |             |
-|  Post  | 게시글 비밀번호 검증 |  `POST`  | /api/post/password/{postId} | { password: String }                                                              | true / false                                                                                                        |           |             |
+| Domain | Feature     |  Method  | URL                                     | Request                                                                           | Response                                                                                                            | Exception                | Description |
+|:------:|:------------|:--------:|-----------------------------------------|-----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|--------------------------|-------------|
+|  Post  | 게시글 작성      |  `POST`  | /api/post                               | { title: String<br/>author: String<br/>password: String<br/>description: String } | { title: String<br/>author: String<br/>description: String<br/>createdAt: String }                                  |                          |             |
+|  Post  | 게시글 목록 조회   |  `GET`   | /api/post                               |                                                                                   | {{<br/> postId: Long<br/>title: String<br/>author: String<br/>description: String<br/>createdAt: String<br/>}, ...} |                          |             |
+|  Post  | 게시글 단건 조회   |  `GET`   | /api/post/{postId}                      |                                                                                   | { title: String<br/>author: String<br/>description: String<br/>createdAt: String }                                  | POST_NOT_FOUND_EXCEPTION |             |
+|  Post  | 게시글 수정      |  `PUT`   | /api/post/{postId}                      | { title: String<br/>author: String<br/>description: String }                      | { title: String<br/>author: String<br/>description: String<br/>createdAt: String }                                  | POST_NOT_FOUND_EXCEPTION |             |
+|  Post  | 게시글 삭제      | `DELETE` | /api/post/{postId}                      |                                                                                   |                                                                                                                     | POST_NOT_FOUND_EXCEPTION |             |
+|  Post  | 게시글 비밀번호 검증 |  `GET`   | /api/post/password/{postId}?password="" |                                                                                   | true / false                                                                                                        | POST_NOT_FOUND_EXCEPTION |             |
 
 <br>
 
 # Entity Relationship Diagram
-![sparta_bulletin_borad_erd.png](image%2FREADME%2Fsparta_bulletin_borad_erd.png)
+<img src="./image/README/sparta_bulletin_borad_erd.png" height="500">
