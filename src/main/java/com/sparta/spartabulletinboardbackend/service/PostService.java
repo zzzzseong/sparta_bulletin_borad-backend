@@ -3,6 +3,8 @@ package com.sparta.spartabulletinboardbackend.service;
 import com.sparta.spartabulletinboardbackend.domain.Post;
 import com.sparta.spartabulletinboardbackend.dto.post.PostCreateRequest;
 import com.sparta.spartabulletinboardbackend.dto.post.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.exception.CustomErrorCode;
+import com.sparta.spartabulletinboardbackend.exception.CustomException;
 import com.sparta.spartabulletinboardbackend.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,13 +38,13 @@ public class PostService {
 
     public Post readPost(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("postID가 잘못되었습니다."));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
     }
 
     @Transactional
     public Post updatePost(PostUpdateRequest request, Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("postID가 잘못되었습니다."));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
 
         post.update(request);
         return post;
@@ -58,7 +60,7 @@ public class PostService {
 
     public boolean validatePassword(Long postId, String password) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("postID가 잘못되었습니다."));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
 
         return post.comparePassword(password);
     }
