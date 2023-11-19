@@ -1,5 +1,6 @@
-package com.sparta.spartabulletinboardbackend.service.jwt;
+package com.sparta.spartabulletinboardbackend.service;
 
+import com.sparta.spartabulletinboardbackend.domain.user.UserRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -7,6 +8,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -15,7 +17,8 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-@Slf4j
+@Slf4j(topic = "JwtService")
+@Service
 public class JwtService {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
@@ -33,13 +36,13 @@ public class JwtService {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(String username, Role role) {
+    public String createToken(String username, UserRole userRole) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username) //사용자 식별자값(ID)
-                        .claim(AUTHORIZATION_KEY, role) //사용자 권한
+                        .claim(AUTHORIZATION_KEY, userRole) //사용자 권한
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) //만료 시간
                         .setIssuedAt(date) //토큰 발행 시간
                         .signWith(key, signatureAlgorithm) //암호화 알고리즘

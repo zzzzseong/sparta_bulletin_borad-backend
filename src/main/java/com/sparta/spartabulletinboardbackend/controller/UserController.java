@@ -1,7 +1,9 @@
 package com.sparta.spartabulletinboardbackend.controller;
 
+import com.sparta.spartabulletinboardbackend.dto.user.UserLoginRequest;
 import com.sparta.spartabulletinboardbackend.dto.user.UserRegisterRequest;
 import com.sparta.spartabulletinboardbackend.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,5 +20,12 @@ public class UserController {
     @PostMapping("/auth/register")
     public void register(@RequestBody UserRegisterRequest request) {
         userService.register(request);
+    }
+
+    @PostMapping("/auth/login")
+    public void login(@RequestBody UserLoginRequest request, HttpServletResponse response) {
+        userService.login(request, response);
+
+        //login 성공시
     }
 }
