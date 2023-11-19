@@ -1,11 +1,11 @@
-package com.sparta.spartabulletinboardbackend.service.jwt;
+package com.sparta.spartabulletinboardbackend.domain.user;
 
-public enum Role {
+public enum UserRole {
     USER(Authority.USER);  // 사용자 권한
 
     private final String authority;
 
-    Role(String authority) {
+    UserRole(String authority) {
         this.authority = authority;
     }
 
