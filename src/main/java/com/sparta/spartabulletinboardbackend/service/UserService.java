@@ -54,6 +54,6 @@ public class UserService {
 
         //Jwt 발급 & response header 추가
         String token = jwtService.createToken(username, findUser.getUserRole());
-        jwtService.addJwtToCookies(token, response);
+        jwtService.addJwtToCookie(token, response);
     }
 }

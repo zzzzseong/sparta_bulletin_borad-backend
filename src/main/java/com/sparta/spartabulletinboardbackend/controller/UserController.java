@@ -28,4 +28,9 @@ public class UserController {
 
         //login 성공시
     }
+
+//    @GetMapping("/test")
+//    public void test(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        System.out.println(userDetails.getUsername());
+//    }
 }
