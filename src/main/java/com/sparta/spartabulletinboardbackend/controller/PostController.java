@@ -1,6 +1,5 @@
 package com.sparta.spartabulletinboardbackend.controller;
 
-import com.sparta.spartabulletinboardbackend.domain.user.User;
 import com.sparta.spartabulletinboardbackend.dto.post.PostCreateRequest;
 import com.sparta.spartabulletinboardbackend.dto.post.PostReadAllResponse;
 import com.sparta.spartabulletinboardbackend.dto.post.PostReadResponse;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/post")
+@RequestMapping("/api/post")
 public class PostController {
 
     private final PostService postService;
@@ -21,9 +20,8 @@ public class PostController {
     @PostMapping("/") //할일카드 작성
     public PostReadResponse createPost(@RequestBody PostCreateRequest request,
                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
         return PostReadResponse.builder()
-                .post(postService.savePost(user, request))
+                .post(postService.savePost(userDetails.getUser(), request))
                 .build();
     }
 

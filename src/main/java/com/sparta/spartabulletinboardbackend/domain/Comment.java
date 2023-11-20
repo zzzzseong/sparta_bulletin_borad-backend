@@ -1,7 +1,6 @@
 package com.sparta.spartabulletinboardbackend.domain;
 
 import com.sparta.spartabulletinboardbackend.domain.user.User;
-import com.sparta.spartabulletinboardbackend.dto.post.PostUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,40 +14,35 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Post {
+public class Comment {
 
     @Id @GeneratedValue
-    @Column(name = "post_id")
+    @Column(name = "comment_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String title;
-    private String content;
-    private boolean success;
+    private String comment;
 
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Post(User user, String title, String content) {
+    public Comment(User user, Post post, String comment) {
         this.user = user;
-        this.title = title;
-        this.content = content;
-        this.success = false;
+        this.post = post;
+        this.comment = comment;
     }
 
-    public Post update(PostUpdateRequest request) {
-        this.title = request.getTitle();
-        this.content = request.getContent();
+    public Comment update(String comment) {
+        this.comment = comment;
         return this;
-    }
-
-    public boolean updateSuccess() {
-        this.success = !this.success;
-        return this.success;
     }
 }
