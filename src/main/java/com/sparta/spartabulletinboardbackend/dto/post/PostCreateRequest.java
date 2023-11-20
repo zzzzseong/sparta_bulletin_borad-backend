@@ -9,7 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostCreateRequest {
     private String title;
-    private String author;
-    private String password;
-    private String description;
+    private String content;
 }

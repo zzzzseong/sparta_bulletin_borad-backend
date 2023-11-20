@@ -1,51 +1,54 @@
 package com.sparta.spartabulletinboardbackend.domain;
 
+import com.sparta.spartabulletinboardbackend.domain.user.User;
 import com.sparta.spartabulletinboardbackend.dto.post.PostUpdateRequest;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
 
     @Id @GeneratedValue
     @Column(name = "post_id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String title;
-    private String author;
-    private String password;
-    private String description;
+    private String content;
+    private boolean success;
 
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Post(String title, String author, String password, String description) {
+    public Post(User user, String title, String content) {
+        this.user = user;
         this.title = title;
-        this.author = author;
-        this.password = password;
-        this.description = description;
+        this.content = content;
+        this.success = false;
     }
 
-    public void update(PostUpdateRequest request) {
+    public Post update(PostUpdateRequest request) {
         this.title = request.getTitle();
-        this.author = request.getAuthor();
-        this.description = request.getDescription();
+        this.content = request.getContent();
+        return this;
     }
 
-    public boolean comparePassword(String password) {
-        return Objects.equals(this.password, password);
+    public boolean updateSuccess() {
+        this.success = !this.success;
+        return this.success;
     }
 }

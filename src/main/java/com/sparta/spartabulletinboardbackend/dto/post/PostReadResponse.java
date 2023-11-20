@@ -1,21 +1,23 @@
 package com.sparta.spartabulletinboardbackend.dto.post;
 
 import com.sparta.spartabulletinboardbackend.domain.Post;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
+@Getter
 public class PostReadResponse {
-    private String title;
-    private String author;
-    private String description;
-    private String createdAt;
+    private final String username;
+    private final String title;
+    private final String content;
+    private final String createdAt;
+    private final boolean success;
 
+    @Builder
     public PostReadResponse(Post post) {
+        this.username = post.getUser().getUsername();
         this.title = post.getTitle();
-        this.author = post.getAuthor();
-        this.description = post.getDescription();
-        this.createdAt = String.valueOf(post.getCreatedAt());
+        this.content = post.getContent();
+        this.createdAt = post.getCreatedAt().toString();
+        this.success = post.isSuccess();
     }
 }

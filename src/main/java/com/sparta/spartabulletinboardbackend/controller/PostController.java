@@ -1,14 +1,15 @@
 package com.sparta.spartabulletinboardbackend.controller;
 
+import com.sparta.spartabulletinboardbackend.domain.user.User;
 import com.sparta.spartabulletinboardbackend.dto.post.PostCreateRequest;
+import com.sparta.spartabulletinboardbackend.dto.post.PostReadAllResponse;
 import com.sparta.spartabulletinboardbackend.dto.post.PostReadResponse;
 import com.sparta.spartabulletinboardbackend.dto.post.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.security.UserDetailsImpl;
 import com.sparta.spartabulletinboardbackend.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,37 +18,42 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("/")
-    public PostReadResponse createPost(@RequestBody PostCreateRequest request) {
-        return new PostReadResponse(postService.savePost(request));
+    @PostMapping("/") //할일카드 작성
+    public PostReadResponse createPost(@RequestBody PostCreateRequest request,
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return PostReadResponse.builder()
+                .post(postService.savePost(user, request))
+                .build();
     }
 
-    @GetMapping("/")
-    public List<PostReadResponse> readPostAll() {
-        return postService.readPostAll()
-                .stream().map(PostReadResponse::new)
-                .collect(Collectors.toList());
+    @GetMapping("") //할일카드 목록 조회
+    public PostReadAllResponse readPostAll() {
+        return new PostReadAllResponse(postService.readAllPost());
     }
 
-    @GetMapping("/{postId}")
+    @GetMapping("/{postId}") //할일카드 단일 조회
     public PostReadResponse readPost(@PathVariable(name = "postId") Long postId) {
-        return new PostReadResponse(postService.readPost(postId));
+        return PostReadResponse.builder()
+                .post(postService.readPost(postId))
+                .build();
     }
 
-    @PutMapping("/{postId}")
+    @PutMapping("/{postId}") //할일카드 수정
     public PostReadResponse updatePost(@PathVariable(name = "postId") Long postId,
                                        @RequestBody PostUpdateRequest request) {
-        return new PostReadResponse(postService.updatePost(request, postId));
+        return PostReadResponse.builder()
+                .post(postService.updatePost(request, postId))
+                .build();
     }
 
-    @DeleteMapping("/{postId}")
+    @GetMapping("/success/{postId}") //할일카드 완료
+    public boolean updateSuccess(@PathVariable(name = "postId") Long postId) {
+        return postService.updatePostSuccess(postId);
+    }
+
+    @DeleteMapping("/{postId}") //할일카드 삭제
     public void deletePost(@PathVariable(name = "postId") Long postId) {
         postService.deletePost(postId);
-    }
-
-    @GetMapping("/password/{postId}")
-    public boolean validatePassword(@PathVariable(name = "postId") Long postId,
-                                    @RequestParam(name = "password") String password) {
-        return postService.validatePassword(postId, password);
     }
 }
