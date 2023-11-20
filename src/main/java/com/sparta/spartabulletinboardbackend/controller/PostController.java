@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/post")
@@ -15,7 +17,7 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
 
-    @PostMapping("/") //할일카드 작성
+    @PostMapping("") //할일카드 작성(Test 완료)
     public PostCreateResponse createPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                        @RequestBody PostCreateRequest request) {
         return PostCreateResponse.builder()
@@ -23,12 +25,12 @@ public class PostController {
                 .build();
     }
 
-    @GetMapping("") //할일카드 목록 조회
-    public PostReadAllResponse readPostAll() {
-        return new PostReadAllResponse(postService.readAllPost());
+    @GetMapping("") //할일카드 목록 조회(Test 완료)
+    public List<PostReadAllResponse> readPostAll() {
+        return postService.readAllPost();
     }
 
-    @GetMapping("/{postId}") //할일카드 단일 조회
+    @GetMapping("/{postId}") //할일카드 단일 조회(Test 완료)
     public PostReadResponse readPost(@PathVariable(name = "postId") Long postId) {
         return PostReadResponse.builder()
                 .post(postService.readPost(postId))
@@ -36,22 +38,22 @@ public class PostController {
                 .build();
     }
 
-    @PutMapping("/{postId}") //할일카드 수정
-    public PostReadResponse updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    @PutMapping("/{postId}") //할일카드 수정(Test 완료)
+    public PostUpdateResponse updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                        @RequestBody PostUpdateRequest request,
                                        @PathVariable(name = "postId") Long postId) {
-        return PostReadResponse.builder()
+        return PostUpdateResponse.builder()
                 .post(postService.updatePost(userDetails.getUser(), request, postId))
                 .build();
     }
 
-    @GetMapping("/success/{postId}") //할일카드 완료
+    @GetMapping("/success/{postId}") //할일카드 완료(Test 완료)
     public boolean updateSuccess(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable(name = "postId") Long postId) {
         return postService.updatePostSuccess(userDetails.getUser(), postId);
     }
 
-    @DeleteMapping("/{postId}") //할일카드 삭제
+    @DeleteMapping("/{postId}") //할일카드 삭제(Test 완료)
     public void deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
                            @PathVariable(name = "postId") Long postId) {
         postService.deletePost(userDetails.getUser(), postId);

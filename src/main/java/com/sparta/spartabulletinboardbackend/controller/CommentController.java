@@ -16,7 +16,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/{postId}") //댓글 작성
+    @PostMapping("/{postId}") //댓글 작성(Test 완료)
     public CommentReadResponse createComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                              @RequestBody CommentCreateRequest request,
                                              @PathVariable(name = "postId") Long postId) {
@@ -25,7 +25,7 @@ public class CommentController {
                 .build();
     }
 
-    @PutMapping("/{commentId}") //댓글 수정
+    @PutMapping("/{commentId}") //댓글 수정(Test 완료)
     public CommentReadResponse updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @RequestBody CommentUpdateRequest request,
                               @PathVariable(name = "commentId") Long commentId) {
@@ -34,7 +34,7 @@ public class CommentController {
                 .build();
     }
 
-    @DeleteMapping("/{commentId}") //댓글 삭제
+    @DeleteMapping("/{commentId}") //댓글 삭제(Test 완료)
     public void deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable(name = "commentId") Long commentId) {
         commentService.deleteComment(userDetails.getUser(), commentId);

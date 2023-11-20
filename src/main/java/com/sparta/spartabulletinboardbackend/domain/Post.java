@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,12 +29,17 @@ public class Post {
 
     private String title;
     private String content;
+
+    @Column(columnDefinition = "TINYINT(1)")
     private boolean success;
 
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private final List<Comment> comments = new ArrayList<>();
 
     public Post(User user, String title, String content) {
         this.user = user;

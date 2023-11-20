@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query("select p from Post p join fetch p.user order by p.user.id, p.createdAt desc")
-    List<Post> findAllPostWithUsername();
+    List<Post> findAllPostWithUser();
 
     @Query("select p from Post p join fetch p.user where p.id = :post_id")
     Optional<Post> findPostWithUserById(@Param("post_id") Long postId);

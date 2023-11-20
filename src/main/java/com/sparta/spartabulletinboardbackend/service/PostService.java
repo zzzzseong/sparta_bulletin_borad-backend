@@ -3,6 +3,8 @@ package com.sparta.spartabulletinboardbackend.service;
 import com.sparta.spartabulletinboardbackend.domain.Post;
 import com.sparta.spartabulletinboardbackend.domain.user.User;
 import com.sparta.spartabulletinboardbackend.dto.post.PostCreateRequest;
+import com.sparta.spartabulletinboardbackend.dto.post.PostReadAllData;
+import com.sparta.spartabulletinboardbackend.dto.post.PostReadAllResponse;
 import com.sparta.spartabulletinboardbackend.dto.post.PostUpdateRequest;
 import com.sparta.spartabulletinboardbackend.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.exception.CustomException;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,8 +28,28 @@ public class PostService {
         return postRepository.save(new Post(user, request.getTitle(), request.getContent()));
     }
 
-    public List<Post> readAllPost() {
-        return postRepository.findAllPostWithUsername();
+    public List<PostReadAllResponse> readAllPost() {
+        List<Post> posts = postRepository.findAllPostWithUser();
+        List<PostReadAllResponse> response = new ArrayList<>();
+
+        String username = "";
+        int responseIndex = -1;
+        for (Post post : posts) {
+            String curUsername = post.getUser().getUsername();
+
+            if (!Objects.equals(username, curUsername)) {
+                username = post.getUser().getUsername();
+                response.add(PostReadAllResponse.builder()
+                        .username(username)
+                        .posts(new ArrayList<>())
+                        .build());
+                responseIndex++;
+            }
+
+            response.get(responseIndex).getPosts().add(new PostReadAllData(post));
+        }
+
+        return response;
     }
 
 
