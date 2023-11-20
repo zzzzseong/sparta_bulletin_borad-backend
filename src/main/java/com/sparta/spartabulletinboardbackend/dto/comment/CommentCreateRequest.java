@@ -1,8 +1,8 @@
 package com.sparta.spartabulletinboardbackend.dto.comment;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class CommentCreateRequest {
     private String comment;
 }
