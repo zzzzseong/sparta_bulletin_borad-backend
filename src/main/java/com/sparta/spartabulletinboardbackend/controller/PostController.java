@@ -1,9 +1,6 @@
 package com.sparta.spartabulletinboardbackend.controller;
 
-import com.sparta.spartabulletinboardbackend.dto.post.PostCreateRequest;
-import com.sparta.spartabulletinboardbackend.dto.post.PostReadAllResponse;
-import com.sparta.spartabulletinboardbackend.dto.post.PostReadResponse;
-import com.sparta.spartabulletinboardbackend.dto.post.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.dto.post.*;
 import com.sparta.spartabulletinboardbackend.security.UserDetailsImpl;
 import com.sparta.spartabulletinboardbackend.service.CommentService;
 import com.sparta.spartabulletinboardbackend.service.PostService;
@@ -19,9 +16,9 @@ public class PostController {
     private final CommentService commentService;
 
     @PostMapping("/") //할일카드 작성
-    public PostReadResponse createPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public PostCreateResponse createPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                        @RequestBody PostCreateRequest request) {
-        return PostReadResponse.builder()
+        return PostCreateResponse.builder()
                 .post(postService.savePost(userDetails.getUser(), request))
                 .build();
     }
