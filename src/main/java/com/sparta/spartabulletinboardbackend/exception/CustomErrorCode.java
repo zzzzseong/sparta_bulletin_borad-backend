@@ -17,7 +17,10 @@ public enum CustomErrorCode {
     INVALID_LOGIN_EXCEPTION("로그인 정보가 올바르지 않습니다"),
 
     //POST
-    POST_NOT_FOUND_EXCEPTION("게시글이 존재하지 않습니다"),
+    POST_NOT_EXIST_EXCEPTION("게시글이 존재하지 않습니다"),
+
+    NOT_ALLOWED_TO_UPDATE_POST_EXCEPTION("댓글 수정 권한이 없습니다."),
+    NOT_ALLOWED_TO_DELETE_POST_EXCEPTION("댓글 삭제 권한이 없습니다."),
 
     //COMMENT
     COMMENT_NOT_EXIST_EXCEPTION("댓글이 존재하지 않습니다"),

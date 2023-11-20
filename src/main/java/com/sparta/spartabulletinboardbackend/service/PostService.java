@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,31 +31,37 @@ public class PostService {
 
 
     public Post readPost(Long postId) {
-        return postRepository.findPostWithUsernameById(postId)
-            .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
+        return postRepository.findPostWithUserById(postId)
+            .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
     }
 
     @Transactional
-    public Post updatePost(PostUpdateRequest request, Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
+    public Post updatePost(User user, PostUpdateRequest request, Long postId) {
+        Post findPost = postRepository.findPostWithUserById(postId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
+        if(!Objects.equals(user.getId(), findPost.getUser().getId()))
+            throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_POST_EXCEPTION, 403);
 
-        return post.update(request);
+        return findPost.update(request);
     }
 
     @Transactional
-    public boolean updatePostSuccess(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
+    public boolean updatePostSuccess(User user, Long postId) {
+        Post findPost = postRepository.findPostWithUserById(postId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
+        if(!Objects.equals(user.getId(), findPost.getUser().getId()))
+            throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_POST_EXCEPTION, 403);
 
-        return post.updateSuccess();
+        return findPost.updateSuccess();
     }
 
     @Transactional
-    public void deletePost(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
+    public void deletePost(User user, Long postId) {
+        Post findPost = postRepository.findPostWithUserById(postId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
+        if(!Objects.equals(user.getId(), findPost.getUser().getId()))
+            throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_DELETE_POST_EXCEPTION, 403);
 
-        postRepository.delete(post);
+        postRepository.delete(findPost);
     }
 }

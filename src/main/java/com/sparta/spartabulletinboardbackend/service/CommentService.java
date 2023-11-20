@@ -25,17 +25,17 @@ public class CommentService {
     @Transactional
     public Comment saveComment(User user, CommentCreateRequest request, Long postId) {
         Post findPost = postRepository.findById(postId)
-                        .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_FOUND_EXCEPTION, 404));
+                        .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
 
         return commentRepository.save(new Comment(user, findPost, request.getComment()));
     }
 
     @Transactional
     public Comment updateComment(User user, CommentUpdateRequest request, Long commentId) {
-        Comment findComment = commentRepository.findCommentWithUsernameById(commentId)
+        Comment findComment = commentRepository.findCommentWithUserById(commentId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.COMMENT_NOT_EXIST_EXCEPTION, 404));
 
-        if(!Objects.equals(user.getId(), findComment.getId()))
+        if(!Objects.equals(user.getId(), findComment.getUser().getId()))
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_COMMENT_EXCEPTION, 403);
 
         return findComment.update(request.getComment());
@@ -43,10 +43,10 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(User user, Long commentId) {
-        Comment findComment = commentRepository.findById(commentId)
+        Comment findComment = commentRepository.findCommentWithUserById(commentId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.COMMENT_NOT_EXIST_EXCEPTION, 404));
 
-        if(!Objects.equals(user.getId(), findComment.getId()))
+        if(!Objects.equals(user.getId(), findComment.getUser().getId()))
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_COMMENT_EXCEPTION, 403);
 
         commentRepository.delete(findComment);

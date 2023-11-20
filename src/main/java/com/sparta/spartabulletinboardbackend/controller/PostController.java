@@ -18,8 +18,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/") //할일카드 작성
-    public PostReadResponse createPost(@RequestBody PostCreateRequest request,
-                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public PostReadResponse createPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                       @RequestBody PostCreateRequest request) {
         return PostReadResponse.builder()
                 .post(postService.savePost(userDetails.getUser(), request))
                 .build();
@@ -38,20 +38,23 @@ public class PostController {
     }
 
     @PutMapping("/{postId}") //할일카드 수정
-    public PostReadResponse updatePost(@PathVariable(name = "postId") Long postId,
-                                       @RequestBody PostUpdateRequest request) {
+    public PostReadResponse updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                       @RequestBody PostUpdateRequest request,
+                                       @PathVariable(name = "postId") Long postId) {
         return PostReadResponse.builder()
-                .post(postService.updatePost(request, postId))
+                .post(postService.updatePost(userDetails.getUser(), request, postId))
                 .build();
     }
 
     @GetMapping("/success/{postId}") //할일카드 완료
-    public boolean updateSuccess(@PathVariable(name = "postId") Long postId) {
-        return postService.updatePostSuccess(postId);
+    public boolean updateSuccess(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 @PathVariable(name = "postId") Long postId) {
+        return postService.updatePostSuccess(userDetails.getUser(), postId);
     }
 
     @DeleteMapping("/{postId}") //할일카드 삭제
-    public void deletePost(@PathVariable(name = "postId") Long postId) {
-        postService.deletePost(postId);
+    public void deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                           @PathVariable(name = "postId") Long postId) {
+        postService.deletePost(userDetails.getUser(), postId);
     }
 }
