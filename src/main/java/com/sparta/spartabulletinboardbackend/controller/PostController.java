@@ -5,6 +5,7 @@ import com.sparta.spartabulletinboardbackend.dto.post.PostReadAllResponse;
 import com.sparta.spartabulletinboardbackend.dto.post.PostReadResponse;
 import com.sparta.spartabulletinboardbackend.dto.post.PostUpdateRequest;
 import com.sparta.spartabulletinboardbackend.security.UserDetailsImpl;
+import com.sparta.spartabulletinboardbackend.service.CommentService;
 import com.sparta.spartabulletinboardbackend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/post")
 public class PostController {
-
     private final PostService postService;
+    private final CommentService commentService;
 
     @PostMapping("/") //할일카드 작성
     public PostReadResponse createPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -34,6 +35,7 @@ public class PostController {
     public PostReadResponse readPost(@PathVariable(name = "postId") Long postId) {
         return PostReadResponse.builder()
                 .post(postService.readPost(postId))
+                .comments(commentService.readAllCommentWithUserByPostId(postId))
                 .build();
     }
 

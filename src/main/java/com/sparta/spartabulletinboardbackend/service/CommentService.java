@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -28,6 +29,10 @@ public class CommentService {
                         .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
 
         return commentRepository.save(new Comment(user, findPost, request.getComment()));
+    }
+
+    public List<Comment> readAllCommentWithUserByPostId(Long postId) {
+        return commentRepository.findCommentWithUserAndPostByPostId(postId);
     }
 
     @Transactional
