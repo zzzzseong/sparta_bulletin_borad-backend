@@ -21,20 +21,26 @@ public class UserService {
 
     @Transactional
     public void register(UserRegisterRequest request) {
-        String username = request.getUsername();
+        String email = request.getEmail();
         String password = request.getPassword();
 
-        //username & password 유효성 검사
-        if (!username.matches("^[a-z0-9]{4,10}$"))
-            throw new CustomException(CustomErrorCode.USERNAME_INVALID_EXCEPTION, 403);
-        if (!password.matches("^[a-zA-Z0-9]{8,15}$"))
+        //email & password 유효성 검사
+        if (!email.matches("\\w+@\\w+\\.\\w+(\\.\\w+)?"))
+            throw new CustomException(CustomErrorCode.EMAIL_INVALID_EXCEPTION, 403);
+        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!])(?=\\S+$).{8,15}$"))
             throw new CustomException(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, 403);
 
-        //username 중복 검사
-        if (userRepository.findByUsername(username).isPresent())
+        //email 중복 검사
+        if (userRepository.findByEmail(email).isPresent())
             throw new CustomException(CustomErrorCode.USER_EXISTS_EXCEPTION, 403);
 
-        User user = new User(UserRole.USER, username, passwordEncoder.encode(password));
-        userRepository.save(user);
+        userRepository.save(
+            User.builder()
+                .username(request.getUsername())
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .userRole(UserRole.USER)
+                .build()
+        );
     }
 }

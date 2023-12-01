@@ -1,9 +1,9 @@
-package com.sparta.spartabulletinboardbackend.common.config;
+package com.sparta.spartabulletinboardbackend.common.configuration;
 
-import com.sparta.spartabulletinboardbackend.jwt.JwtAuthenticationFilter;
-import com.sparta.spartabulletinboardbackend.jwt.JwtAuthorizationFilter;
+import com.sparta.spartabulletinboardbackend.common.jwt.JwtAuthenticationFilter;
+import com.sparta.spartabulletinboardbackend.common.jwt.JwtAuthorizationFilter;
 import com.sparta.spartabulletinboardbackend.user.service.UserDetailsServiceImpl;
-import com.sparta.spartabulletinboardbackend.jwt.JwtUtil;
+import com.sparta.spartabulletinboardbackend.common.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.sparta.spartabulletinboardbackend.jwt;
+package com.sparta.spartabulletinboardbackend.common.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.spartabulletinboardbackend.user.entity.UserRole;
@@ -31,12 +31,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("로그인 시도");
         try {
             UserLoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), UserLoginRequest.class);
-            System.out.println("loginRequest.getUsername() = " + loginRequest.getUsername());
-            System.out.println("loginRequest.getPassword() = " + loginRequest.getPassword());
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
+                            loginRequest.getEmail(),
                             loginRequest.getPassword(),
                             null
                     )

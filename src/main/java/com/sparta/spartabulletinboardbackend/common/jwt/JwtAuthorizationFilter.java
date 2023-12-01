@@ -1,4 +1,4 @@
-package com.sparta.spartabulletinboardbackend.jwt;
+package com.sparta.spartabulletinboardbackend.common.jwt;
 
 import com.sparta.spartabulletinboardbackend.user.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
