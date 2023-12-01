@@ -46,7 +46,7 @@ public class KakaoService {
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
         // 4. JWT 토큰 반환 -> 이미 가입된 사용자라면 로그인 처리 후 JWT발급
-        return jwtUtil.createToken(kakaoUser.getUsername(), kakaoUser.getUserRole());
+        return jwtUtil.createToken(kakaoUser.getEmail(), kakaoUser.getUserRole());
     }
 
     private String getToken(String code) throws JsonProcessingException {
@@ -66,7 +66,7 @@ public class KakaoService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", kakaoApiKey);
-        body.add("redirect_uri", "http://localhost:8080/api/user/kakao/callback");
+        body.add("redirect_uri", "http://localhost:8080/api/user/auth/kakao/callback");
         body.add("code", code);
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
@@ -126,16 +126,15 @@ public class KakaoService {
         User kakaoUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (kakaoUser == null) {
-            // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
+            // 카카오 사용자 email과 동일한 email 가진 회원이 있는지 확인
             String kakaoEmail = kakaoUserInfo.getEmail();
             User sameEmailUser = userRepository.findByEmail(kakaoEmail).orElse(null);
             if (sameEmailUser != null) {
                 kakaoUser = sameEmailUser;
                 kakaoUser = kakaoUser.kakaoIdUpdate(kakaoId);
             } else {
-                // email: kakao email
+                // email: kakao email & password: random UUID
                 String email = kakaoUserInfo.getEmail();
-                // password: random UUID
                 String encodedPassword = passwordEncoder.encode(UUID.randomUUID().toString());
                 kakaoUser = User.builder()
                         .username(kakaoUserInfo.getNickname())

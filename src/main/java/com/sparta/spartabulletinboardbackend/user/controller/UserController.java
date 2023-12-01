@@ -23,10 +23,13 @@ public class UserController {
         userService.register(request);
     }
 
-    @GetMapping("/kakao/callback")
+    @GetMapping("/auth/kakao/callback")
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        System.out.println("check 1");
         String token = kakaoService.kakaoLogin(code);
+        System.out.println("check 2");
         jwtUtil.addJwtToCookie(token, response);
+        System.out.println("check 3");
     }
 
 }
