@@ -32,7 +32,6 @@ public class User {
     @Column(name = "kakao_id")
     private Long kakaoId;
 
-
     @Builder
     public User(String username, String email, String password, UserRole userRole, Long kakaoId) {
         this.username = username;

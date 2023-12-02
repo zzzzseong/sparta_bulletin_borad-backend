@@ -3,6 +3,8 @@ package com.sparta.spartabulletinboardbackend.comment.entity;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import com.sparta.spartabulletinboardbackend.post.entity.Post;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,11 +15,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Table(name = "comment")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
 
@@ -29,6 +32,7 @@ public class Comment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "comment", nullable = false)
     private String comment;
 
     @CreatedDate
@@ -36,6 +40,7 @@ public class Comment {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    @Builder
     public Comment(User user, Post post, String comment) {
         this.user = user;
         this.post = post;

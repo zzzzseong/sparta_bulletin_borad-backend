@@ -4,6 +4,8 @@ import com.sparta.spartabulletinboardbackend.comment.entity.Comment;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -16,11 +18,12 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@Table(name = "post")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Post {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
@@ -28,10 +31,13 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(columnDefinition = "TINYINT(1)")
+    @Column(columnDefinition = "TINYINT(1)", nullable = false)
     private boolean success;
 
     @CreatedDate
@@ -42,6 +48,7 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private final List<Comment> comments = new ArrayList<>();
 
+    @Builder
     public Post(User user, String title, String content) {
         this.user = user;
         this.title = title;
