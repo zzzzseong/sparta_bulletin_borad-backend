@@ -1,8 +1,8 @@
 package com.sparta.spartabulletinboardbackend.post.entity;
 
 import com.sparta.spartabulletinboardbackend.comment.entity.Comment;
-import com.sparta.spartabulletinboardbackend.user.entity.User;
 import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -65,5 +65,9 @@ public class Post {
     public boolean updateSuccess() {
         this.success = !this.success;
         return this.success;
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 }

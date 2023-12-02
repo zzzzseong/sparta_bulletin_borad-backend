@@ -27,8 +27,13 @@ public class CommentService {
     public Comment saveComment(User user, CommentCreateRequest request, Long postId) {
         Post findPost = postRepository.findById(postId)
                         .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
-
-        return commentRepository.save(new Comment(user, findPost, request.getComment()));
+        Comment comment = Comment.builder()
+                .user(user)
+                .post(findPost)
+                .comment(request.getComment())
+                .build();
+        findPost.addComment(comment);
+        return commentRepository.save(comment);
     }
 
     public List<Comment> readAllCommentWithUserByPostId(Long postId) {

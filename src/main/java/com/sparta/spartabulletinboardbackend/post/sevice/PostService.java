@@ -25,7 +25,13 @@ public class PostService {
 
     @Transactional
     public Post savePost(User user, PostCreateRequest request) {
-        return postRepository.save(new Post(user, request.getTitle(), request.getContent()));
+        Post post = Post.builder()
+                .user(user)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
+        user.addPost(post);
+        return postRepository.save(post);
     }
 
     public List<PostReadAllResponse> readAllPost() {
