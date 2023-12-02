@@ -28,7 +28,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j(topic = "KakaoService")
 public class KakaoService {
-    @Value("${kakao-api-key}") private String kakaoApiKey;
+    @Value("${kakao.api.key}") private String kakaoApiKey;
 
     private final PasswordEncoder passwordEncoder;
     private final RestTemplate restTemplate;

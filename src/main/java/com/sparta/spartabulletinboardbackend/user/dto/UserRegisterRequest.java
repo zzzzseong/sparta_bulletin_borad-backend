@@ -1,8 +1,10 @@
 package com.sparta.spartabulletinboardbackend.user.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UserRegisterRequest {
     private String username;
     private String email;
