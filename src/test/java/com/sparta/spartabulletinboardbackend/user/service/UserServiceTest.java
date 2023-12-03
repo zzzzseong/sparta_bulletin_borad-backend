@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
 
 
 @ActiveProfiles("test")
@@ -129,11 +130,26 @@ class UserServiceTest {
         assertEquals(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, exception3.getErrorCode());
         assertEquals(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, exception4.getErrorCode());
     }
-//
-//    @Test
-//    @DisplayName("사용자 회원가입(실패) - 이메일 중복 발생")
-//    public void registerTestEmailDuplicate() {
-//
-//    }
+
+    @Test
+    @DisplayName("사용자 회원가입(실패) - 이메일 중복 발생")
+    public void registerTestEmailDuplicate() {
+        //given
+        UserRegisterRequest request = new UserRegisterRequest();
+        request.setUsername("username");
+        request.setEmail("email@email.com");
+        request.setPassword("password1A~");
+
+        UserService userService = new UserService(userRepository, passwordEncoder);
+
+        User user = userService.register(request);
+        given(userRepository.findByEmail(request.getEmail())).willReturn(java.util.Optional.of(user));
+
+        //when
+        CustomException exception = assertThrows(CustomException.class, () -> userService.register(request));
+
+        //then
+        assertEquals(CustomErrorCode.USER_EXISTS_EXCEPTION, exception.getErrorCode());
+    }
 
 }
