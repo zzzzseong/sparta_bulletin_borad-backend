@@ -72,4 +72,24 @@ class PostServiceTest {
         assertEquals(CustomErrorCode.POST_TITLE_INVALID_EXCEPTION, exception.getErrorCode());
     }
 
+    @Test
+    @DisplayName("TODO 단건 조회(실패) - TODO가 존재하지 않음")
+    public void readPostTestNotExist() {
+        //given
+        Long postId = 100L;
+        PostService postService = new PostService(postRepository);
+
+        //when
+        CustomException exception = assertThrows(CustomException.class, () -> postService.readPost(postId));
+
+        //then
+        assertEquals(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, exception.getErrorCode());
+    }
+
+//    @Test
+//    @DisplayName("TODO 수정(성공)")
+//    public void updatePostSuccess() {
+//
+//    }
+
 }
