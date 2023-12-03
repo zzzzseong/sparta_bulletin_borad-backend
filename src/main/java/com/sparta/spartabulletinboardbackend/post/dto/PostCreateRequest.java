@@ -1,8 +1,10 @@
 package com.sparta.spartabulletinboardbackend.post.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PostCreateRequest {
     private String title;
     private String content;

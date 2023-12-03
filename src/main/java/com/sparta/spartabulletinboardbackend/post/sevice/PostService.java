@@ -25,13 +25,18 @@ public class PostService {
 
     @Transactional
     public Post savePost(User user, PostCreateRequest request) {
+        if(request.getTitle().length() <= 1)
+            throw new CustomException(CustomErrorCode.POST_TITLE_INVALID_EXCEPTION, 400);
+
         Post post = Post.builder()
                 .user(user)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();
         user.addPost(post);
-        return postRepository.save(post);
+
+        postRepository.save(post);
+        return post;
     }
 
     public List<PostReadAllResponse> readAllPost() {
