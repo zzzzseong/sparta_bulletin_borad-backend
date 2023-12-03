@@ -124,4 +124,37 @@ class PostServiceTest {
         assertEquals(request.getContent(), updatePost.getContent());
     }
 
+    @Test
+    @DisplayName("TODO 수정(실패) - TODO가 존재하지 않음")
+    public void updatePostNotExist() {
+        //given
+        User user = User.builder()
+                .username("username")
+                .email("email@email.com")
+                .password("passwordA1~")
+                .userRole(UserRole.USER)
+                .build();
+
+        PostUpdateRequest request = new PostUpdateRequest();
+        request.setTitle("title2");
+        request.setContent("content2");
+
+        Long postId = 100L;
+
+        PostService postService = new PostService(postRepository);
+        given(postRepository.findById(postId)).willReturn(Optional.empty());
+
+        //when
+        CustomException exception = assertThrows(CustomException.class, () -> postService.updatePost(user, postId, request));
+
+        //then
+        assertEquals(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, exception.getErrorCode());
+    }
+
+//    @Test
+//    @DisplayName("TODO 수정(실패) - 수정 권한이 없음")
+//    public void updatePostNotAllow() {
+//
+//    }
+
 }
