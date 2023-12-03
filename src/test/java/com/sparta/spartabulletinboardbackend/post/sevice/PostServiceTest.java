@@ -3,6 +3,7 @@ package com.sparta.spartabulletinboardbackend.post.sevice;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomException;
 import com.sparta.spartabulletinboardbackend.post.dto.PostCreateRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
 import com.sparta.spartabulletinboardbackend.post.entity.Post;
 import com.sparta.spartabulletinboardbackend.post.repository.PostRepository;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
@@ -14,8 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -86,10 +90,38 @@ class PostServiceTest {
         assertEquals(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, exception.getErrorCode());
     }
 
-//    @Test
-//    @DisplayName("TODO 수정(성공)")
-//    public void updatePostSuccess() {
-//
-//    }
+    @Test
+    @DisplayName("TODO 수정(성공)")
+    public void updatePostSuccess() {
+        //given
+        User user = User.builder()
+                .username("username")
+                .email("email@email.com")
+                .password("passwordA1~")
+                .userRole(UserRole.USER)
+                .build();
+
+        Post post = Post.builder()
+                .user(user)
+                .title("title")
+                .content("content")
+                .build();
+
+        PostUpdateRequest request = new PostUpdateRequest();
+        request.setTitle("title2");
+        request.setContent("content2");
+
+        Long postId = 100L;
+
+        PostService postService = new PostService(postRepository);
+        given(postRepository.findById(postId)).willReturn(Optional.of(post));
+
+        //when
+        Post updatePost = postService.updatePost(user, postId, request);
+
+        //then
+        assertEquals(request.getTitle(), updatePost.getTitle());
+        assertEquals(request.getContent(), updatePost.getContent());
+    }
 
 }

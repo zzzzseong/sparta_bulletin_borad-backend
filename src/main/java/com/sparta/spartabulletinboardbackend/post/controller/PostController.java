@@ -43,7 +43,7 @@ public class PostController {
                                        @RequestBody PostUpdateRequest request,
                                        @PathVariable(name = "postId") Long postId) {
         return PostUpdateResponse.builder()
-                .post(postService.updatePost(userDetails.getUser(), request, postId))
+                .post(postService.updatePost(userDetails.getUser(), postId, request))
                 .build();
     }
 
