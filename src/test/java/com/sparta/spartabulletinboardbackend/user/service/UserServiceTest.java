@@ -86,12 +86,49 @@ class UserServiceTest {
         assertEquals(CustomErrorCode.EMAIL_INVALID_EXCEPTION, exception3.getErrorCode());
         assertEquals(CustomErrorCode.EMAIL_INVALID_EXCEPTION, exception4.getErrorCode());
     }
-//
-//    @Test
-//    @DisplayName("사용자 회원가입(실패) - 유효성 검사 부적합(비밀번호)")
-//    public void registerTestPasswordInvalid() {
-//
-//    }
+
+    @Test
+    @DisplayName("사용자 회원가입(실패) - 유효성 검사 부적합(비밀번호)")
+    public void registerTestPasswordInvalid() {
+        //given
+        //숫자가 없는 경우
+        UserRegisterRequest request1 = new UserRegisterRequest();
+        request1.setUsername("username");
+        request1.setEmail("email@email.com");
+        request1.setPassword("passwordA~");
+
+        //영문 대문자가 없는 경우
+        UserRegisterRequest request2 = new UserRegisterRequest();
+        request2.setUsername("username");
+        request2.setEmail("email@email.com");
+        request2.setPassword("password1~");
+
+        //특수문자가 없는 경우
+        UserRegisterRequest request3 = new UserRegisterRequest();
+        request3.setUsername("username");
+        request3.setEmail("email@email.com");
+        request3.setPassword("password1A");
+
+        //영문 소문자가 없는 경우
+        UserRegisterRequest request4 = new UserRegisterRequest();
+        request4.setUsername("username");
+        request4.setEmail("email@email.com");
+        request4.setPassword("PASSWORD1A~");
+
+        UserService userService = new UserService(userRepository, passwordEncoder);
+
+        //when
+        CustomException exception1 = assertThrows(CustomException.class, () -> userService.register(request1));
+        CustomException exception2 = assertThrows(CustomException.class, () -> userService.register(request2));
+        CustomException exception3 = assertThrows(CustomException.class, () -> userService.register(request3));
+        CustomException exception4 = assertThrows(CustomException.class, () -> userService.register(request4));
+
+        //then
+        assertEquals(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, exception1.getErrorCode());
+        assertEquals(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, exception2.getErrorCode());
+        assertEquals(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, exception3.getErrorCode());
+        assertEquals(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, exception4.getErrorCode());
+    }
 //
 //    @Test
 //    @DisplayName("사용자 회원가입(실패) - 이메일 중복 발생")
