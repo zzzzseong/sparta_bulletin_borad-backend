@@ -90,12 +90,13 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(User user, Long postId) {
-        Post findPost = postRepository.findById(postId)
+    public Post deletePost(User user, Long postId) {
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
-        if(!Objects.equals(user.getEmail(), findPost.getUser().getEmail()))
+        if(!Objects.equals(user.getEmail(), post.getUser().getEmail()))
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_DELETE_POST_EXCEPTION, 403);
 
-        postRepository.delete(findPost);
+        postRepository.delete(post);
+        return post;
     }
 }

@@ -21,7 +21,7 @@ public class CommentController {
                                              @RequestBody CommentCreateRequest request,
                                              @PathVariable(name = "postId") Long postId) {
         return CommentReadResponse.builder()
-                .comment(commentService.saveComment(userDetails.getUser(), request, postId))
+                .comment(commentService.saveComment(userDetails.getUser(), postId, request))
                 .build();
     }
 

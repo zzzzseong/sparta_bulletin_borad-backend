@@ -29,7 +29,7 @@ class PostServiceTest {
     @Mock PostRepository postRepository;
 
     @Nested
-    @DisplayName("TODO 생성 테스트")
+    @DisplayName("TODO 생성 서비스 테스트")
     class CreatePostTest {
         @Test
         @DisplayName("TODO 생성(성공)")
@@ -96,7 +96,7 @@ class PostServiceTest {
     }
 
     @Nested
-    @DisplayName("TODO 수정 테스트")
+    @DisplayName("TODO 수정 서비스 테스트")
     class UpdatePostTest {
         @Test
         @DisplayName("TODO 수정(성공)")
@@ -200,7 +200,7 @@ class PostServiceTest {
     }
 
     @Nested
-    @DisplayName("TODO 완료 테스트")
+    @DisplayName("TODO 완료 서비스 테스트")
     class UpdatePostSuccessTest {
 
         @Test
