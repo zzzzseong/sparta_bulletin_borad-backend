@@ -24,12 +24,6 @@ public class UserService {
         String email = request.getEmail();
         String password = request.getPassword();
 
-        //email & password 유효성 검사
-        if (!email.matches("\\w+@\\w+\\.\\w+(\\.\\w+)?"))
-            throw new CustomException(CustomErrorCode.EMAIL_INVALID_EXCEPTION, 403);
-        if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[~@#$%^&+=!])(?=\\S+$).{8,15}$"))
-            throw new CustomException(CustomErrorCode.PASSWORD_INVALID_EXCEPTION, 403);
-
         //email 중복 검사
         if (userRepository.findByEmail(email).isPresent())
             throw new CustomException(CustomErrorCode.USER_EXISTS_EXCEPTION, 403);

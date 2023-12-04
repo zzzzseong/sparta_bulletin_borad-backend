@@ -11,6 +11,8 @@ public enum CustomErrorCode {
     USER_EXISTS_EXCEPTION("이미 존재하는 회원입니다"),
     USER_NOT_EXIST_EXCEPTION("존재하지 않은 회원입니다"),
 
+    INVALID_INPUT_VALUE("입력값이 유효하지 않습니다."),
+
     EMAIL_INVALID_EXCEPTION("유효하지 않은 이메일입니다"),
     PASSWORD_INVALID_EXCEPTION("유효하지 않은 비밀번호입니다"),
 

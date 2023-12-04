@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExceptionResponse {
+public class CustomExceptionResponse {
     private CustomErrorCode errorCode;
     private String statusMessage;
 }
