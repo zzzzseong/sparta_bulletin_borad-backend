@@ -256,5 +256,40 @@ class PostServiceTest {
             //then
             assertEquals(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, exception.getErrorCode());
         }
+
+        @Test
+        @DisplayName("TODO 완료(실패) - 수정 권한이 없음")
+        public void updatePostSuccessNotAllow() {
+            User user = User.builder()
+                    .username("username")
+                    .email("email1@email.com")
+                    .password("passwordA1~")
+                    .userRole(UserRole.USER)
+                    .build();
+
+            User user2 = User.builder()
+                    .username("username")
+                    .email("email2@email.com")
+                    .password("passwordA1~")
+                    .userRole(UserRole.USER)
+                    .build();
+
+            Post post = Post.builder()
+                    .user(user)
+                    .title("title")
+                    .content("content")
+                    .build();
+
+            Long postId = 100L;
+
+            PostService postService = new PostService(postRepository);
+            given(postRepository.findById(postId)).willReturn(Optional.of(post));
+
+            //when
+            CustomException exception = assertThrows(CustomException.class, () -> postService.updatePostSuccess(user2, postId));
+
+            //then
+            assertEquals(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_POST_EXCEPTION, exception.getErrorCode());
+        }
     }
 }
