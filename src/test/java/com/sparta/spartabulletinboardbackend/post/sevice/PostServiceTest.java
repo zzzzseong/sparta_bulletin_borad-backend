@@ -233,5 +233,28 @@ class PostServiceTest {
             //then
             assertEquals(!successPrev, success);
         }
+
+        @Test
+        @DisplayName("TODO 완료(실패) - TODO가 존재하지 않음")
+        public void updatePostSuccessNotExist() {
+            //given
+            User user = User.builder()
+                    .username("username")
+                    .email("email@email.com")
+                    .password("passwordA1~")
+                    .userRole(UserRole.USER)
+                    .build();
+
+            Long postId = 100L;
+
+            PostService postService = new PostService(postRepository);
+            given(postRepository.findById(postId)).willReturn(Optional.empty());
+
+            //when
+            CustomException exception = assertThrows(CustomException.class, () -> postService.updatePostSuccess(user, postId));
+
+            //then
+            assertEquals(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, exception.getErrorCode());
+        }
     }
 }
