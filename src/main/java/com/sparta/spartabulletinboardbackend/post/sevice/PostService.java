@@ -10,6 +10,7 @@ import com.sparta.spartabulletinboardbackend.common.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomException;
 import com.sparta.spartabulletinboardbackend.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,21 +20,18 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j(topic = "PostService")
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
 
     @Transactional
     public Post savePost(User user, PostCreateRequest request) {
-        if(request.getTitle().length() <= 1)
-            throw new CustomException(CustomErrorCode.POST_TITLE_INVALID_EXCEPTION, 400);
-
         Post post = Post.builder()
                 .user(user)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .build();
-        user.addPost(post);
 
         postRepository.save(post);
         return post;

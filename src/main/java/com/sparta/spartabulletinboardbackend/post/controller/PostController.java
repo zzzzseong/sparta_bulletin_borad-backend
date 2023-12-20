@@ -1,9 +1,10 @@
 package com.sparta.spartabulletinboardbackend.post.controller;
 
-import com.sparta.spartabulletinboardbackend.post.dto.*;
-import com.sparta.spartabulletinboardbackend.user.entity.UserDetailsImpl;
 import com.sparta.spartabulletinboardbackend.comment.service.CommentService;
+import com.sparta.spartabulletinboardbackend.post.dto.*;
 import com.sparta.spartabulletinboardbackend.post.sevice.PostService;
+import com.sparta.spartabulletinboardbackend.user.entity.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,10 @@ public class PostController {
     private final CommentService commentService;
 
     @PostMapping("") //할일카드 작성(Test 완료)
-    public PostCreateResponse createPost(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                         @RequestBody PostCreateRequest request) {
+    public PostCreateResponse createPost(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Valid @RequestBody PostCreateRequest request
+    ) {
         return PostCreateResponse.builder()
                 .post(postService.savePost(userDetails.getUser(), request))
                 .build();
