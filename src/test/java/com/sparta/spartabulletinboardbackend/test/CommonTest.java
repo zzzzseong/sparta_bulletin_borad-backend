@@ -9,6 +9,7 @@ public interface CommonTest {
     String TEST_USER_NAME = "username";
     String TEST_USER_EMAIL = "email@email.com";
     String TEST_USER_PASSWORD = "password1A~";
+
     User TEST_USER = User.builder()
             .username(TEST_USER_NAME)
             .email(TEST_USER_EMAIL)

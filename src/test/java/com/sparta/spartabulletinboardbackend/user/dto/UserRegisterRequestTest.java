@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserRegisterRequestTest implements CommonTest {
 
     @Nested
-    @DisplayName("유저 회원가입 요청 DTO 생성 성공")
+    @DisplayName("유저 회원가입 요청 DTO 생성")
     class userRegisterRequestTest {
 
         @Test

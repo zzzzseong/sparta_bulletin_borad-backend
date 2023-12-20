@@ -40,7 +40,7 @@ public class PostService {
     }
 
     public List<PostReadAllResponse> readAllPost() {
-        List<Post> posts = postRepository.findAllPostWithUser();
+        List<Post> posts = postRepository.findAllPostWithUser(); //1번
         List<PostReadAllResponse> response = new ArrayList<>();
 
         String username = "";

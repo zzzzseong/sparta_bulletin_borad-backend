@@ -30,7 +30,7 @@ public class CommentController {
                               @RequestBody CommentUpdateRequest request,
                               @PathVariable(name = "commentId") Long commentId) {
         return CommentReadResponse.builder()
-                .comment(commentService.updateComment(userDetails.getUser(), request, commentId))
+                .comment(commentService.updateComment(request, userDetails.getUser(), commentId))
                 .build();
     }
 

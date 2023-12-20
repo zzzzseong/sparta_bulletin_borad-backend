@@ -37,29 +37,30 @@ public class CommentService {
         return comment;
     }
 
+    //이거 수정
     public List<Comment> readAllCommentWithUserByPostId(Long postId) {
         return commentRepository.findCommentWithUserAndPostByPostId(postId);
     }
 
     @Transactional
-    public Comment updateComment(User user, CommentUpdateRequest request, Long commentId) {
-        Comment findComment = commentRepository.findCommentWithUserById(commentId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.COMMENT_NOT_EXIST_EXCEPTION, 404));
-
-        if(!Objects.equals(user.getId(), findComment.getUser().getId()))
-            throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_COMMENT_EXCEPTION, 403);
-
+    public Comment updateComment(CommentUpdateRequest request, User user, Long commentId) {
+        Comment findComment = getUserComment(user, commentId);
         return findComment.update(request.getComment());
     }
 
     @Transactional
     public void deleteComment(User user, Long commentId) {
-        Comment findComment = commentRepository.findCommentWithUserById(commentId)
+        Comment comment = getUserComment(user, commentId);
+        commentRepository.delete(comment);
+    }
+
+    private Comment getUserComment(User user, Long commentId) {
+        Comment comment = commentRepository.findByIdWithUser(commentId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.COMMENT_NOT_EXIST_EXCEPTION, 404));
 
-        if(!Objects.equals(user.getId(), findComment.getUser().getId()))
+        if(!Objects.equals(user.getId(), comment.getUser().getId()))
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_COMMENT_EXCEPTION, 403);
 
-        commentRepository.delete(findComment);
+        return comment;
     }
 }
