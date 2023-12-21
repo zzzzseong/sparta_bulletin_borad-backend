@@ -1,6 +1,6 @@
 package com.sparta.spartabulletinboardbackend.post.entity;
 
-import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import com.sparta.spartabulletinboardbackend.user.entity.UserRole;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,7 @@ class PostTest {
         User user = new User("username", "email", "password", UserRole.USER, null);
         Post post = new Post(user, "title", "content");
 
-        PostUpdateRequest postUpdateRequest = new PostUpdateRequest();
+        PostRequest postUpdateRequest = new PostRequest();
         postUpdateRequest.setTitle("new title");
         postUpdateRequest.setContent("new content");
 

@@ -32,18 +32,13 @@ public class CommentServiceImpl implements CommentService {
                 .post(post)
                 .comment(request.getComment())
                 .build();
-        post.addComment(comment);
+
         commentRepository.save(comment);
         return comment;
     }
 
     public List<Comment> readAllComment(Long postId) {
         return commentRepository.findAll();
-    }
-
-    //이거 수정
-    public List<Comment> readAllCommentWithUserByPostId(Long postId) {
-        return commentRepository.findCommentWithUserAndPostByPostId(postId);
     }
 
     @Transactional

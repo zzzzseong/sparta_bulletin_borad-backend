@@ -1,7 +1,7 @@
 package com.sparta.spartabulletinboardbackend.post.entity;
 
 import com.sparta.spartabulletinboardbackend.common.Timestamp;
-import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -40,7 +40,7 @@ public class Post extends Timestamp {
         this.success = false;
     }
 
-    public Post update(PostUpdateRequest request) {
+    public Post update(PostRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
         return this;

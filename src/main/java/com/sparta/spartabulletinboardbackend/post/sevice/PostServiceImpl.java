@@ -1,21 +1,21 @@
 package com.sparta.spartabulletinboardbackend.post.sevice;
 
-import com.sparta.spartabulletinboardbackend.post.entity.Post;
-import com.sparta.spartabulletinboardbackend.user.entity.User;
-import com.sparta.spartabulletinboardbackend.post.dto.PostCreateRequest;
-import com.sparta.spartabulletinboardbackend.post.dto.PostReadAllData;
-import com.sparta.spartabulletinboardbackend.post.dto.PostReadAllResponse;
-import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomException;
+import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostResponse;
+import com.sparta.spartabulletinboardbackend.post.entity.Post;
 import com.sparta.spartabulletinboardbackend.post.repository.PostRepository;
+import com.sparta.spartabulletinboardbackend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
 
     @Transactional
-    public Post savePost(User user, PostCreateRequest request) {
+    public Post savePost(User user, PostRequest request) {
         Post post = Post.builder()
                 .user(user)
                 .title(request.getTitle())
@@ -38,30 +38,22 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
-    public List<PostReadAllResponse> readAllPost() {
-        List<Post> posts = postRepository.findAllPostWithUser(); //1번
-        List<PostReadAllResponse> response = new ArrayList<>();
+    public Map<String, List<PostResponse>> readAllPost() {
+        Map<String, List<PostResponse>> userPostMap = new HashMap<>();
 
-        String username = "";
-        int responseIndex = -1;
-        for (Post post : posts) {
-            String curUsername = post.getUser().getUsername();
+        //작성일 기준 내림차순
+        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
 
-            if (!Objects.equals(username, curUsername)) {
-                username = post.getUser().getUsername();
-                response.add(PostReadAllResponse.builder()
-                        .username(username)
-                        .posts(new ArrayList<>())
-                        .build());
-                responseIndex++;
-            }
+        for(Post post : posts) {
+            String username = post.getUser().getUsername();
+            PostResponse postResponse = PostResponse.builder().post(post).build();
 
-            response.get(responseIndex).getPosts().add(new PostReadAllData(post));
+            if(userPostMap.containsKey(username)) userPostMap.get(username).add(postResponse);
+            else userPostMap.put(username, List.of(postResponse));
         }
 
-        return response;
+        return userPostMap;
     }
-
 
     public Post readPost(Long postId) {
         return postRepository.findById(postId)
@@ -69,7 +61,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Transactional
-    public Post updatePost(User user, Long postId, PostUpdateRequest request) {
+    public Post updatePost(User user, PostRequest request, Long postId) {
         Post findPost = getUserPost(user, postId);
 
         return findPost.update(request);

@@ -6,12 +6,12 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class PostReadAllResponse {
-    private String username;
-    private List<PostReadAllData> posts;
+public class PostListResponse {
+    private final String username;
+    private final List<PostResponse> posts;
 
     @Builder
-    public PostReadAllResponse(String username, List<PostReadAllData> posts) {
+    public PostListResponse(String username, List<PostResponse> posts) {
         this.username = username;
         this.posts = posts;
     }

@@ -2,8 +2,7 @@ package com.sparta.spartabulletinboardbackend.post.sevice;
 
 import com.sparta.spartabulletinboardbackend.common.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomException;
-import com.sparta.spartabulletinboardbackend.post.dto.PostCreateRequest;
-import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
 import com.sparta.spartabulletinboardbackend.post.entity.Post;
 import com.sparta.spartabulletinboardbackend.post.repository.PostRepository;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
@@ -42,7 +41,7 @@ class PostServiceTest {
                     .userRole(UserRole.USER)
                     .build();
 
-            PostCreateRequest request = new PostCreateRequest();
+            PostRequest request = new PostRequest();
             request.setTitle("title");
             request.setContent("content");
 
@@ -67,7 +66,7 @@ class PostServiceTest {
                     .userRole(UserRole.USER)
                     .build();
 
-            PostCreateRequest request = new PostCreateRequest();
+            PostRequest request = new PostRequest();
             request.setTitle("");
             request.setContent("content");
 
@@ -115,7 +114,7 @@ class PostServiceTest {
                     .content("content")
                     .build();
 
-            PostUpdateRequest request = new PostUpdateRequest();
+            PostRequest request = new PostRequest();
             request.setTitle("title2");
             request.setContent("content2");
 
@@ -125,7 +124,7 @@ class PostServiceTest {
             given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
             //when
-            Post updatePost = postService.updatePost(user, postId, request);
+            Post updatePost = postService.updatePost(user, request, postId);
 
             //then
             assertEquals(request.getTitle(), updatePost.getTitle());
@@ -143,7 +142,7 @@ class PostServiceTest {
                     .userRole(UserRole.USER)
                     .build();
 
-            PostUpdateRequest request = new PostUpdateRequest();
+            PostRequest request = new PostRequest();
             request.setTitle("title2");
             request.setContent("content2");
 
@@ -153,7 +152,7 @@ class PostServiceTest {
             given(postRepository.findById(postId)).willReturn(Optional.empty());
 
             //when
-            CustomException exception = assertThrows(CustomException.class, () -> postService.updatePost(user, postId, request));
+            CustomException exception = assertThrows(CustomException.class, () -> postService.updatePost(user, request, postId));
 
             //then
             assertEquals(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, exception.getErrorCode());
@@ -182,7 +181,7 @@ class PostServiceTest {
                     .content("content")
                     .build();
 
-            PostUpdateRequest request = new PostUpdateRequest();
+            PostRequest request = new PostRequest();
             request.setTitle("title2");
             request.setContent("content2");
 
@@ -192,7 +191,7 @@ class PostServiceTest {
             given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
             //when
-            CustomException exception = assertThrows(CustomException.class, () -> postService.updatePost(user2, postId, request));
+            CustomException exception = assertThrows(CustomException.class, () -> postService.updatePost(user2, request, postId));
 
             //then
             assertEquals(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_POST_EXCEPTION, exception.getErrorCode());

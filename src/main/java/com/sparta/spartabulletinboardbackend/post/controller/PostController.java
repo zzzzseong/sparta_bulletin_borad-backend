@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class PostController {
     @PostMapping("") //할일카드 작성(Test 완료)
     public ResponseEntity<PostResponse> createPost(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Valid @RequestBody PostCreateRequest request
+            @Valid @RequestBody PostRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 PostResponse.builder()
@@ -33,29 +35,32 @@ public class PostController {
     }
 
     @GetMapping("") //할일카드 목록 조회(Test 완료)
-    public ResponseEntity<List<PostReadAllResponse>> readPostAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                postService.readAllPost()
-        );
+    public ResponseEntity<List<PostListResponse>> readPostAll() {
+        List<PostListResponse> response = new ArrayList<>();
+
+        Map<String, List<PostResponse>> userPostMap = postService.readAllPost();
+
+        userPostMap.forEach((key, value) -> response.add(new PostListResponse(key, value)));
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/{postId}") //할일카드 단일 조회(Test 완료)
-    public ResponseEntity<PostReadResponse> readPost(@PathVariable(name = "postId") Long postId) {
+    public ResponseEntity<PostResponse> readPost(@PathVariable(name = "postId") Long postId) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                PostReadResponse.builder()
+                PostResponse.builder()
                     .post(postService.readPost(postId))
-                    .comments(commentService.readAllCommentWithUserByPostId(postId))
                     .build()
         );
     }
 
     @PutMapping("/{postId}") //할일카드 수정(Test 완료)
     public ResponseEntity<PostResponse> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                       @RequestBody PostUpdateRequest request,
+                                       @RequestBody PostRequest request,
                                        @PathVariable(name = "postId") Long postId) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 PostResponse.builder()
-                    .post(postService.updatePost(userDetails.getUser(), postId, request))
+                    .post(postService.updatePost(userDetails.getUser(), request, postId))
                     .build()
         );
     }

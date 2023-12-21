@@ -1,12 +1,12 @@
 package com.sparta.spartabulletinboardbackend.post.sevice;
 
-import com.sparta.spartabulletinboardbackend.post.dto.PostCreateRequest;
-import com.sparta.spartabulletinboardbackend.post.dto.PostReadAllResponse;
-import com.sparta.spartabulletinboardbackend.post.dto.PostUpdateRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostResponse;
 import com.sparta.spartabulletinboardbackend.post.entity.Post;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PostService {
 
@@ -16,13 +16,13 @@ public interface PostService {
      * @param request TODO 생성 요청 정보
      * @return TODO 생성 결과
      * */
-    Post savePost(User user, PostCreateRequest request);
+    Post savePost(User user, PostRequest request);
 
     /**
      * TODO 전체 조회
      * @return TODO 전체 조회 결과
      * */
-    List<PostReadAllResponse> readAllPost();
+    Map<String, List<PostResponse>> readAllPost();
 
     /**
      * TODO 조회
@@ -38,7 +38,7 @@ public interface PostService {
      * @param request TODO 업데이트 요청 정보
      * @return TODO 업데이트 결과
      * */
-    Post updatePost(User user, Long postId, PostUpdateRequest request);
+    Post updatePost(User user, PostRequest request, Long postId);
 
     /**
      * TODO 완료 업데이트
