@@ -46,7 +46,7 @@ class PostServiceTest {
             request.setTitle("title");
             request.setContent("content");
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
 
             //when
             Post post = postService.savePost(user, request);
@@ -71,7 +71,7 @@ class PostServiceTest {
             request.setTitle("");
             request.setContent("content");
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
 
             //when
             CustomException exception = assertThrows(CustomException.class, () -> postService.savePost(user, request));
@@ -86,7 +86,7 @@ class PostServiceTest {
     public void readPostTestNotExist() {
         //given
         Long postId = 100L;
-        PostService postService = new PostService(postRepository);
+        PostServiceImpl postService = new PostServiceImpl(postRepository);
 
         //when
         CustomException exception = assertThrows(CustomException.class, () -> postService.readPost(postId));
@@ -121,7 +121,7 @@ class PostServiceTest {
 
             Long postId = 100L;
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
             given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
             //when
@@ -149,7 +149,7 @@ class PostServiceTest {
 
             Long postId = 100L;
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
             given(postRepository.findById(postId)).willReturn(Optional.empty());
 
             //when
@@ -188,7 +188,7 @@ class PostServiceTest {
 
             Long postId = 100L;
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
             given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
             //when
@@ -224,7 +224,7 @@ class PostServiceTest {
 
             Long postId = 100L;
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
             given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
             //when
@@ -247,7 +247,7 @@ class PostServiceTest {
 
             Long postId = 100L;
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
             given(postRepository.findById(postId)).willReturn(Optional.empty());
 
             //when
@@ -282,7 +282,7 @@ class PostServiceTest {
 
             Long postId = 100L;
 
-            PostService postService = new PostService(postRepository);
+            PostServiceImpl postService = new PostServiceImpl(postRepository);
             given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
             //when

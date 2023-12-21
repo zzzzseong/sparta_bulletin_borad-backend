@@ -2,7 +2,7 @@ package com.sparta.spartabulletinboardbackend.post.controller;
 
 import com.sparta.spartabulletinboardbackend.comment.service.CommentService;
 import com.sparta.spartabulletinboardbackend.post.dto.*;
-import com.sparta.spartabulletinboardbackend.post.sevice.PostService;
+import com.sparta.spartabulletinboardbackend.post.sevice.PostServiceImpl;
 import com.sparta.spartabulletinboardbackend.user.entity.UserDetailsImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/post")
 public class PostController {
-    private final PostService postService;
+    private final PostServiceImpl postService;
     private final CommentService commentService;
 
     @PostMapping("") //할일카드 작성(Test 완료)
