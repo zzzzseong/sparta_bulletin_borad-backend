@@ -1,6 +1,6 @@
 package com.sparta.spartabulletinboardbackend.comment.service;
 
-import com.sparta.spartabulletinboardbackend.comment.dto.CommentCreateRequest;
+import com.sparta.spartabulletinboardbackend.comment.dto.CommentRequest;
 import com.sparta.spartabulletinboardbackend.comment.entity.Comment;
 import com.sparta.spartabulletinboardbackend.comment.repository.CommentRepository;
 import com.sparta.spartabulletinboardbackend.post.entity.Post;
@@ -42,15 +42,15 @@ class CommentServiceTest {
             Long postId = 100L;
             Post post = Post.builder().build();
 
-            CommentCreateRequest request = new CommentCreateRequest();
+            CommentRequest request = new CommentRequest();
             request.setComment("comment");
 
             given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
-            CommentService commentService = new CommentService(commentRepository, postRepository);
+            CommentServiceImpl commentService = new CommentServiceImpl(commentRepository, postRepository);
 
             //when
-            Comment comment = commentService.saveComment(user, postId, request);
+            Comment comment = commentService.saveComment(user, request, postId);
 
             //then
             assertEquals(request.getComment(), comment.getComment());

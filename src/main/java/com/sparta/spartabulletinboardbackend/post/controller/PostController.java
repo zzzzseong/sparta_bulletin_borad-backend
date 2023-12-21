@@ -1,6 +1,6 @@
 package com.sparta.spartabulletinboardbackend.post.controller;
 
-import com.sparta.spartabulletinboardbackend.comment.service.CommentService;
+import com.sparta.spartabulletinboardbackend.comment.service.CommentServiceImpl;
 import com.sparta.spartabulletinboardbackend.post.dto.*;
 import com.sparta.spartabulletinboardbackend.post.sevice.PostServiceImpl;
 import com.sparta.spartabulletinboardbackend.user.entity.UserDetailsImpl;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/post")
 public class PostController {
     private final PostServiceImpl postService;
-    private final CommentService commentService;
+    private final CommentServiceImpl commentService;
 
     @PostMapping("") //할일카드 작성(Test 완료)
     public ResponseEntity<PostResponse> createPost(
