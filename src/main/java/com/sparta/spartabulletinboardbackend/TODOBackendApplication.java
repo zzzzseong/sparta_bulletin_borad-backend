@@ -6,10 +6,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class SpartaBulletinBoardBackendApplication {
+public class TODOBackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpartaBulletinBoardBackendApplication.class, args);
+        SpringApplication.run(TODOBackendApplication.class, args);
     }
 
 }
