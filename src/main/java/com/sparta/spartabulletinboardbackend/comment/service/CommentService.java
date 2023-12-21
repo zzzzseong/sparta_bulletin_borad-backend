@@ -27,6 +27,7 @@ public class CommentService {
     public Comment saveComment(User user, Long postId, CommentCreateRequest request) {
         Post post = postRepository.findById(postId)
                         .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
+
         Comment comment = Comment.builder()
                 .user(user)
                 .post(post)

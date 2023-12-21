@@ -69,32 +69,33 @@ public class PostService {
 
     @Transactional
     public Post updatePost(User user, Long postId, PostUpdateRequest request) {
-        Post findPost = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
-        if(!Objects.equals(user.getEmail(), findPost.getUser().getEmail()))
-            throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_POST_EXCEPTION, 403);
+        Post findPost = getUserPost(user, postId);
 
         return findPost.update(request);
     }
 
     @Transactional
     public Boolean updatePostSuccess(User user, Long postId) {
-        Post findPost = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
-        if(!Objects.equals(user.getEmail(), findPost.getUser().getEmail()))
-            throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_UPDATE_POST_EXCEPTION, 403);
+        Post findPost = getUserPost(user, postId);
 
         return findPost.updateSuccess();
     }
 
     @Transactional
     public Post deletePost(User user, Long postId) {
-        Post post = postRepository.findById(postId)
+        Post findPost = getUserPost(user, postId);
+
+        postRepository.delete(findPost);
+        return findPost;
+    }
+
+    private Post getUserPost(User user, Long postId) {
+        Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
-        if(!Objects.equals(user.getEmail(), post.getUser().getEmail()))
+
+        if(!Objects.equals(user.getEmail(), findPost.getUser().getEmail()))
             throw new CustomException(CustomErrorCode.NOT_ALLOWED_TO_DELETE_POST_EXCEPTION, 403);
 
-        postRepository.delete(post);
-        return post;
+        return findPost;
     }
 }
