@@ -14,7 +14,7 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(e.getStatus()).body(new CustomExceptionResponse(e.getErrorCode(), e.getMessage()));
     }
 
-    //입력값 검증 실패
+    //입력값 검증 실패 - 유효성 검사에 대한 권장 상태코드는 400-Bad Request
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CustomExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return ResponseEntity.status(e.getStatusCode()).body(

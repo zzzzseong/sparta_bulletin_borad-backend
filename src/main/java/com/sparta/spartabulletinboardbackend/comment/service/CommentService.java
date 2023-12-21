@@ -49,9 +49,10 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(User user, Long commentId) {
+    public Comment deleteComment(User user, Long commentId) {
         Comment comment = getUserComment(user, commentId);
         commentRepository.delete(comment);
+        return comment;
     }
 
     private Comment getUserComment(User user, Long commentId) {

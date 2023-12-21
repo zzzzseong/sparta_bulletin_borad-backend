@@ -78,7 +78,7 @@ public class PostService {
     }
 
     @Transactional
-    public boolean updatePostSuccess(User user, Long postId) {
+    public Boolean updatePostSuccess(User user, Long postId) {
         Post findPost = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
         if(!Objects.equals(user.getEmail(), findPost.getUser().getEmail()))
