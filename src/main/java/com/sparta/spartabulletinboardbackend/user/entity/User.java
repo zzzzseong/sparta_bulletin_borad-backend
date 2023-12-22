@@ -1,6 +1,6 @@
 package com.sparta.spartabulletinboardbackend.user.entity;
 
-import com.sparta.spartabulletinboardbackend.common.Timestamp;
+import com.sparta.spartabulletinboardbackend.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends Timestamp {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

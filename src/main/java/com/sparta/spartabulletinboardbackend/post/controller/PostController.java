@@ -65,6 +65,16 @@ public class PostController {
         );
     }
 
+    @DeleteMapping("/{postId}") //할일카드 삭제(Test 완료)
+    public ResponseEntity<PostResponse> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                   @PathVariable(name = "postId") Long postId) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                PostResponse.builder()
+                        .post(postService.deletePost(userDetails.getUser(), postId))
+                        .build()
+        );
+    }
+
     @GetMapping("/success/{postId}") //할일카드 완료(Test 완료)
     public ResponseEntity<Boolean> updateSuccess(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable(name = "postId") Long postId) {
@@ -73,13 +83,14 @@ public class PostController {
         );
     }
 
-    @DeleteMapping("/{postId}") //할일카드 삭제(Test 완료)
-    public ResponseEntity<PostResponse> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                           @PathVariable(name = "postId") Long postId) {
+    @GetMapping("/search") //할일카드 검색
+    public ResponseEntity<List<PostResponse>> searchPost(
+            @RequestParam(name = "keyword") String keyword,
+            @RequestParam(name = "page") int page
+    ) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                PostResponse.builder()
-                        .post(postService.deletePost(userDetails.getUser(), postId))
-                        .build()
+                postService.searchPost(keyword, page).stream()
+                        .map(PostResponse::new).toList()
         );
     }
 }

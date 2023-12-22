@@ -1,14 +1,19 @@
 package com.sparta.spartabulletinboardbackend.post.sevice;
 
+import com.sparta.spartabulletinboardbackend.common.consts.ServiceConst;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomException;
 import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
 import com.sparta.spartabulletinboardbackend.post.dto.PostResponse;
 import com.sparta.spartabulletinboardbackend.post.entity.Post;
+import com.sparta.spartabulletinboardbackend.post.repository.PostQueryRepositoryImpl;
 import com.sparta.spartabulletinboardbackend.post.repository.PostRepository;
+import com.sparta.spartabulletinboardbackend.post.repository.PostSearchCond;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,7 @@ import java.util.Objects;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final PostQueryRepositoryImpl postQueryRepository;
 
     @Transactional
     public Post savePost(User user, PostRequest request) {
@@ -80,6 +86,15 @@ public class PostServiceImpl implements PostService {
 
         postRepository.delete(findPost);
         return findPost;
+    }
+
+    public List<Post> searchPost(String keyword, int page) {
+        PostSearchCond cond = new PostSearchCond(keyword);
+
+        //최근 생성 게시물 내림차순
+        Pageable pageable = PageRequest.of(page, ServiceConst.DEFAULT_BATCH_SIZE, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+        return postQueryRepository.search(cond, pageable);
     }
 
     private Post getUserPost(User user, Long postId) {

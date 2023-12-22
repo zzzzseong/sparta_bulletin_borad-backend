@@ -1,6 +1,6 @@
 package com.sparta.spartabulletinboardbackend.comment.entity;
 
-import com.sparta.spartabulletinboardbackend.common.Timestamp;
+import com.sparta.spartabulletinboardbackend.common.BaseEntity;
 import com.sparta.spartabulletinboardbackend.post.entity.Post;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import jakarta.persistence.*;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends Timestamp {
+public class Comment extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")

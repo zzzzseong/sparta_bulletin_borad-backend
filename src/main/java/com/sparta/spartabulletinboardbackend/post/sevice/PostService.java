@@ -55,4 +55,9 @@ public interface PostService {
      * @return TODO 삭제 결과
      * */
     Post deletePost(User user, Long postId);
+
+    /**
+     * TODO 검색
+     *
+     * */
 }
