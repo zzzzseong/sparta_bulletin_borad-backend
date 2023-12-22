@@ -20,7 +20,7 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
     @Override
     public List<Comment> readCommentAll(Long postId, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(QComment.comment.post.id.eq(postId));
+        builder.and(QComment.comment.todo.id.eq(postId));
 
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
 

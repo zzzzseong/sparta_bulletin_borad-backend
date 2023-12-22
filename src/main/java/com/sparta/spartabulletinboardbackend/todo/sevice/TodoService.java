@@ -1,14 +1,14 @@
-package com.sparta.spartabulletinboardbackend.post.sevice;
+package com.sparta.spartabulletinboardbackend.todo.sevice;
 
-import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
-import com.sparta.spartabulletinboardbackend.post.dto.PostResponse;
-import com.sparta.spartabulletinboardbackend.post.entity.Post;
+import com.sparta.spartabulletinboardbackend.todo.dto.TodoRequest;
+import com.sparta.spartabulletinboardbackend.todo.dto.TodoResponse;
+import com.sparta.spartabulletinboardbackend.todo.entity.Todo;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 
 import java.util.List;
 import java.util.Map;
 
-public interface PostService {
+public interface TodoService {
 
     /**
      * TODO 생성
@@ -16,45 +16,45 @@ public interface PostService {
      * @param request TODO 생성 요청 정보
      * @return TODO 생성 결과
      * */
-    Post savePost(User user, PostRequest request);
+    Todo saveTodo(User user, TodoRequest request);
 
     /**
      * TODO 전체 조회
      * @return TODO 전체 조회 결과
      * */
-    Map<String, List<PostResponse>> readAllPost();
+    Map<String, List<TodoResponse>> readAllTodo();
 
     /**
      * TODO 조회
-     * @param postId TODO 조회 ID
+     * @param todoId TODO 조회 ID
      * @return TODO 조회 결과
      * */
-    Post readPost(Long postId);
+    Todo readTodo(Long todoId);
 
     /**
      * TODO 업데이트
      * @param user TODO 업데이트 요청자
-     * @param postId TODO 업데이트 ID
+     * @param todoId TODO 업데이트 ID
      * @param request TODO 업데이트 요청 정보
      * @return TODO 업데이트 결과
      * */
-    Post updatePost(User user, PostRequest request, Long postId);
+    Todo updateTodo(User user, TodoRequest request, Long todoId);
 
     /**
      * TODO 완료 업데이트
      * @param user TODO 완료 업데이트 요청자
-     * @param postId TODO 완료 업데이트 ID
+     * @param todoId TODO 완료 업데이트 ID
      * @return TODO 완료 업데이트 결과
      * */
-    Boolean updatePostSuccess(User user, Long postId);
+    Boolean updateTodoSuccess(User user, Long todoId);
 
     /**
      * TODO 삭제
      * @param user TODO 삭제 요청자
-     * @param postId TODO 삭제 ID
+     * @param todoId TODO 삭제 ID
      * @return TODO 삭제 결과
      * */
-    Post deletePost(User user, Long postId);
+    Todo deleteTodo(User user, Long todoId);
 
     /**
      * TODO 검색

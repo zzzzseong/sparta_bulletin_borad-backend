@@ -1,7 +1,7 @@
-package com.sparta.spartabulletinboardbackend.post.entity;
+package com.sparta.spartabulletinboardbackend.todo.entity;
 
 import com.sparta.spartabulletinboardbackend.common.BaseEntity;
-import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
+import com.sparta.spartabulletinboardbackend.todo.dto.TodoRequest;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post extends BaseEntity {
+public class Todo extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -33,14 +33,14 @@ public class Post extends BaseEntity {
     private boolean success;
 
     @Builder
-    public Post(User user, String title, String content) {
+    public Todo(User user, String title, String content) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.success = false;
     }
 
-    public Post update(PostRequest request) {
+    public Todo update(TodoRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
         return this;

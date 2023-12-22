@@ -3,13 +3,13 @@ package com.sparta.spartabulletinboardbackend.comment.service;
 import com.sparta.spartabulletinboardbackend.comment.entity.Comment;
 import com.sparta.spartabulletinboardbackend.comment.repository.CommentQueryRepository;
 import com.sparta.spartabulletinboardbackend.common.consts.ServiceConst;
-import com.sparta.spartabulletinboardbackend.post.entity.Post;
+import com.sparta.spartabulletinboardbackend.todo.entity.Todo;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import com.sparta.spartabulletinboardbackend.comment.dto.CommentRequest;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomException;
 import com.sparta.spartabulletinboardbackend.comment.repository.CommentRepository;
-import com.sparta.spartabulletinboardbackend.post.repository.PostRepository;
+import com.sparta.spartabulletinboardbackend.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -28,17 +28,17 @@ import java.util.Objects;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final CommentQueryRepository commentQueryRepository;
-    private final PostRepository postRepository;
+    private final TodoRepository todoRepository;
 
     @Override
     @Transactional
     public Comment saveComment(User user, CommentRequest request, Long postId) {
-        Post post = postRepository.findById(postId)
+        Todo todo = todoRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
 
         Comment comment = Comment.builder()
                 .user(user)
-                .post(post)
+                .todo(todo)
                 .content(request.getComment())
                 .build();
 

@@ -1,7 +1,7 @@
 package com.sparta.spartabulletinboardbackend.comment.entity;
 
 import com.sparta.spartabulletinboardbackend.common.BaseEntity;
-import com.sparta.spartabulletinboardbackend.post.entity.Post;
+import com.sparta.spartabulletinboardbackend.todo.entity.Todo;
 import com.sparta.spartabulletinboardbackend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,7 +21,7 @@ public class Comment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Todo todo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -31,9 +31,9 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Builder
-    public Comment(User user, Post post, String content) {
+    public Comment(User user, Todo todo, String content) {
         this.user = user;
-        this.post = post;
+        this.todo = todo;
         this.content = content;
     }
 
