@@ -1,15 +1,15 @@
 package com.sparta.spartabulletinboardbackend.comment.service;
 
-import com.sparta.spartabulletinboardbackend.comment.entity.Comment;
-import com.sparta.spartabulletinboardbackend.comment.repository.CommentQueryRepository;
-import com.sparta.spartabulletinboardbackend.common.consts.ServiceConst;
-import com.sparta.spartabulletinboardbackend.todo.entity.Todo;
-import com.sparta.spartabulletinboardbackend.user.entity.User;
 import com.sparta.spartabulletinboardbackend.comment.dto.CommentRequest;
+import com.sparta.spartabulletinboardbackend.comment.entity.Comment;
+import com.sparta.spartabulletinboardbackend.comment.repository.CommentQueryRepositoryImpl;
+import com.sparta.spartabulletinboardbackend.comment.repository.CommentRepository;
+import com.sparta.spartabulletinboardbackend.common.consts.ServiceConst;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomErrorCode;
 import com.sparta.spartabulletinboardbackend.common.exception.CustomException;
-import com.sparta.spartabulletinboardbackend.comment.repository.CommentRepository;
+import com.sparta.spartabulletinboardbackend.todo.entity.Todo;
 import com.sparta.spartabulletinboardbackend.todo.repository.TodoRepository;
+import com.sparta.spartabulletinboardbackend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -26,8 +26,9 @@ import java.util.Objects;
 @Slf4j(topic = "CommentService")
 @Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
+
     private final CommentRepository commentRepository;
-    private final CommentQueryRepository commentQueryRepository;
+    private final CommentQueryRepositoryImpl commentQueryRepository;
     private final TodoRepository todoRepository;
 
     @Override

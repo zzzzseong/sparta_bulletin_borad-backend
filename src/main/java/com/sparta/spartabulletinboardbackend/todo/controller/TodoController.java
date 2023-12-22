@@ -26,7 +26,7 @@ public class TodoController {
     private final CommentServiceImpl commentService;
 
     @PostMapping("") //할일카드 작성(Test 완료)
-    public ResponseEntity<TodoResponse> createPost(
+    public ResponseEntity<TodoResponse> createTodo(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Valid @RequestBody TodoRequest request
     ) {
@@ -38,7 +38,7 @@ public class TodoController {
     }
 
     @GetMapping("") //할일카드 목록 조회(Test 완료)
-    public ResponseEntity<List<TodoListResponse>> readPostAll() {
+    public ResponseEntity<List<TodoListResponse>> readTodoAll() {
         List<TodoListResponse> response = new ArrayList<>();
 
         Map<String, List<TodoResponse>> userPostMap = todoService.readAllTodo();
@@ -49,7 +49,7 @@ public class TodoController {
     }
 
     @GetMapping("/{todoId}") //할일카드 단일 조회(Test 완료)
-    public ResponseEntity<TodoResponse> readPost(@PathVariable(name = "todoId") Long todoId) {
+    public ResponseEntity<TodoResponse> readTodo(@PathVariable(name = "todoId") Long todoId) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 TodoResponse.builder()
                     .todo(todoService.readTodo(todoId))
@@ -58,7 +58,7 @@ public class TodoController {
     }
 
     @PutMapping("/{todoId}") //할일카드 수정(Test 완료)
-    public ResponseEntity<TodoResponse> updatePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<TodoResponse> updateTodo(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                    @RequestBody TodoRequest request,
                                                    @PathVariable(name = "todoId") Long todoId) {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -69,7 +69,7 @@ public class TodoController {
     }
 
     @DeleteMapping("/{todoId}") //할일카드 삭제(Test 완료)
-    public ResponseEntity<TodoResponse> deletePost(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<TodoResponse> deleteTodo(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                    @PathVariable(name = "todoId") Long todoId) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 TodoResponse.builder()
@@ -90,7 +90,7 @@ public class TodoController {
     }
 
     @GetMapping("/success/{todoId}") //할일카드 완료(Test 완료)
-    public ResponseEntity<Boolean> updateSuccess(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<Boolean> updateTodoSuccess(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                  @PathVariable(name = "todoId") Long todoId) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 todoService.updateTodoSuccess(userDetails.getUser(), todoId)
@@ -98,7 +98,7 @@ public class TodoController {
     }
 
     @GetMapping("/search") //할일카드 검색
-    public ResponseEntity<List<TodoResponse>> searchPost(
+    public ResponseEntity<List<TodoResponse>> searchTodo(
             @RequestParam(name = "keyword") String keyword,
             @RequestParam(name = "page") int page
     ) {
