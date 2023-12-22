@@ -7,13 +7,13 @@ import lombok.Getter;
 @Getter
 public class CommentResponse {
     private final String username;
-    private final String comment;
+    private final String content;
     private final String createAt;
 
     @Builder
     public CommentResponse(Comment comment) {
         this.username = comment.getUser().getUsername();
-        this.comment = comment.getComment();
+        this.content = comment.getContent();
         this.createAt = comment.getCreatedAt().toString();
     }
 }

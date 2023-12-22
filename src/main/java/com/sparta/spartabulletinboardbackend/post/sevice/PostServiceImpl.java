@@ -32,6 +32,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostQueryRepositoryImpl postQueryRepository;
 
+    @Override
     @Transactional
     public Post savePost(User user, PostRequest request) {
         Post post = Post.builder()
@@ -44,6 +45,7 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
+    @Override
     public Map<String, List<PostResponse>> readAllPost() {
         Map<String, List<PostResponse>> userPostMap = new HashMap<>();
 
@@ -61,11 +63,13 @@ public class PostServiceImpl implements PostService {
         return userPostMap;
     }
 
+    @Override
     public Post readPost(Long postId) {
         return postRepository.findById(postId)
             .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
     }
 
+    @Override
     @Transactional
     public Post updatePost(User user, PostRequest request, Long postId) {
         Post findPost = getUserPost(user, postId);
@@ -73,6 +77,7 @@ public class PostServiceImpl implements PostService {
         return findPost.update(request);
     }
 
+    @Override
     @Transactional
     public Boolean updatePostSuccess(User user, Long postId) {
         Post findPost = getUserPost(user, postId);
@@ -80,6 +85,7 @@ public class PostServiceImpl implements PostService {
         return findPost.updateSuccess();
     }
 
+    @Override
     @Transactional
     public Post deletePost(User user, Long postId) {
         Post findPost = getUserPost(user, postId);

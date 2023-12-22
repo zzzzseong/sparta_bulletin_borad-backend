@@ -1,9 +1,9 @@
-package com.sparta.spartabulletinboardbackend.post.repository;
+package com.sparta.spartabulletinboardbackend.comment.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.spartabulletinboardbackend.post.entity.Post;
-import com.sparta.spartabulletinboardbackend.post.entity.QPost;
+import com.sparta.spartabulletinboardbackend.comment.entity.Comment;
+import com.sparta.spartabulletinboardbackend.comment.entity.QComment;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -13,20 +13,22 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class PostQueryRepositoryImpl implements PostQueryRepository {
+public class CommentQueryRepositoryImpl implements CommentQueryRepository {
 
     private final EntityManager em;
 
     @Override
-    public List<Post> search(PostSearchCond cond, Pageable pageable) {
+    public List<Comment> readCommentAll(Long postId, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(QPost.post.title.like(cond.getKeyword()));
+        builder.and(QComment.comment.post.id.eq(postId));
 
         JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
+
         return jpaQueryFactory
-                .select(QPost.post)
-                .from(QPost.post)
+                .select(QComment.comment)
+                .from(QComment.comment)
                 .where(builder)
+                .innerJoin(QComment.comment.user).fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

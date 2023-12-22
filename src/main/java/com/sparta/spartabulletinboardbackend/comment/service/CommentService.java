@@ -18,11 +18,12 @@ public interface CommentService {
     Comment saveComment(User user, CommentRequest request, Long postId);
 
     /**
-     * Comment 전체 조회
+     * Comment 조회
      * @param postId Comment 조회 TODO ID
-     * @return Comment 전체 조회 결과
+     * @param page Comment 조회 페이지
+     * @return Comment 조회 결과
      * */
-    List<Comment> readAllComment(Long postId);
+    List<Comment> readComment(Long postId, int page);
 
 
     /**

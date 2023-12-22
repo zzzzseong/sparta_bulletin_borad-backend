@@ -27,18 +27,18 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "comment", nullable = false)
-    private String comment;
+    @Column(name = "content", nullable = false)
+    private String content;
 
     @Builder
-    public Comment(User user, Post post, String comment) {
+    public Comment(User user, Post post, String content) {
         this.user = user;
         this.post = post;
-        this.comment = comment;
+        this.content = content;
     }
 
-    public Comment update(String comment) {
-        this.comment = comment;
+    public Comment update(String content) {
+        this.content = content;
         return this;
     }
 }

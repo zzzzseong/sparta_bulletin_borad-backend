@@ -1,7 +1,10 @@
 package com.sparta.spartabulletinboardbackend.post.controller;
 
+import com.sparta.spartabulletinboardbackend.comment.dto.CommentResponse;
 import com.sparta.spartabulletinboardbackend.comment.service.CommentServiceImpl;
-import com.sparta.spartabulletinboardbackend.post.dto.*;
+import com.sparta.spartabulletinboardbackend.post.dto.PostListResponse;
+import com.sparta.spartabulletinboardbackend.post.dto.PostRequest;
+import com.sparta.spartabulletinboardbackend.post.dto.PostResponse;
 import com.sparta.spartabulletinboardbackend.post.sevice.PostServiceImpl;
 import com.sparta.spartabulletinboardbackend.user.entity.UserDetailsImpl;
 import jakarta.validation.Valid;
@@ -72,6 +75,17 @@ public class PostController {
                 PostResponse.builder()
                         .post(postService.deletePost(userDetails.getUser(), postId))
                         .build()
+        );
+    }
+
+    @GetMapping("/{postId}/comment/") //할일카드 댓글 조회
+    public ResponseEntity<List<CommentResponse>> readComment(
+            @PathVariable(name = "postId") Long postId,
+            @RequestParam(name = "page") int page
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                commentService.readComment(postId, page).stream()
+                        .map(CommentResponse::new).toList()
         );
     }
 
