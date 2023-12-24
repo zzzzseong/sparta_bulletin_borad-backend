@@ -49,9 +49,7 @@ public class TodoController {
     @GetMapping("/{todoId}") //할일카드 단일 조회(Test 완료)
     public ResponseEntity<TodoResponse> readTodo(@PathVariable(name = "todoId") Long todoId) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                TodoResponse.builder()
-                    .todo(todoService.readTodo(todoId))
-                    .build()
+            todoService.readTodo(todoId)
         );
     }
 

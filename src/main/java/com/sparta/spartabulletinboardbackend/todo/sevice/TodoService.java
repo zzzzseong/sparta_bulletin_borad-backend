@@ -29,7 +29,7 @@ public interface TodoService {
      * @param todoId TODO 조회 ID
      * @return TODO 조회 결과
      * */
-    Todo readTodo(Long todoId);
+    TodoResponse readTodo(Long todoId);
 
     /**
      * TODO 업데이트

@@ -16,16 +16,19 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 /**
  * @SpringBootTest 모든 Bean을 로드하기 때문에 테스트 구동시간 증가, 큰 단위로 인한 디버깅의 어려움을 겪을 수 있다.
  * @WebMvcTest Present Layer 관련 컴포넌트만 스캔하기 때문에 테스트 구동시간 감소, 작은 단위로 인한 디버깅의 용이성을 가진다. (슬라이스 테스트)
- * */
+ */
 class TodoControllerTest extends ControllerTest implements TodoTest {
 
     //TodoController에서 사용하는 service bean을 @MockBean으로 주입해야한다.
@@ -43,7 +46,7 @@ class TodoControllerTest extends ControllerTest implements TodoTest {
         /**
          * 기존 TodoService에서 Todo를 return했는데 SliceTest를 진행하려다보니 TodoResponse의 생성자로 매개변수인 Todo객체가 null로 전달되는 문제 발생
          * -> TodoService의 return 타입을 Todo에서 TodoResponse로 변경해서 해결 완료
-         * */
+         */
         @Test
         @DisplayName("TODO 생성 요청 성공")
         void createTodo_success() throws Exception {
@@ -75,15 +78,34 @@ class TodoControllerTest extends ControllerTest implements TodoTest {
 
             //when
             ResultActions action = mockMvc.perform(post("/api/todo")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .accept(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request))
             );
 
             //then
             action
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
+                    .andExpect(status().isBadRequest())
+                    .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
         }
+    }
+
+    @Test
+    @DisplayName("TODO 단일 조회 요청 성공")
+    void readTodo_success() throws Exception {
+        //given
+        given(todoService.readTodo(TEST_TODO_ID)).willReturn(TEST_TODO_RESPONSE_DTO);
+
+        //when
+        ResultActions action = mockMvc.perform(get("/api/todo/{todoId}", TEST_TODO_ID)
+                .accept(MediaType.APPLICATION_JSON));
+
+        //then
+        //status와 값을 잘 매칭해서 반환하는지 테스트
+        action
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username").value(TEST_USER.getUsername()))
+            .andExpect(jsonPath("$.title").value(TEST_TODO_TITLE))
+            .andExpect(jsonPath("$.content").value(TEST_TODO_CONTENT));
     }
 }

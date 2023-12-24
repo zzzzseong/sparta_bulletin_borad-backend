@@ -66,9 +66,11 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Todo readTodo(Long todoId) {
-        return todoRepository.findById(todoId)
-            .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404));
+    public TodoResponse readTodo(Long todoId) {
+        return TodoResponse.builder()
+                .todo(todoRepository.findById(todoId)
+                        .orElseThrow(() -> new CustomException(CustomErrorCode.POST_NOT_EXIST_EXCEPTION, 404)))
+                .build();
     }
 
     @Override
