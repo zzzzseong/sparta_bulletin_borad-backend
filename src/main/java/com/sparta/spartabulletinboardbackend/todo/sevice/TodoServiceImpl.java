@@ -34,7 +34,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public Todo saveTodo(User user, TodoRequest request) {
+    public TodoResponse saveTodo(User user, TodoRequest request) {
         Todo todo = Todo.builder()
                 .user(user)
                 .title(request.getTitle())
@@ -42,7 +42,9 @@ public class TodoServiceImpl implements TodoService {
                 .build();
 
         todoRepository.save(todo);
-        return todo;
+        return TodoResponse.builder()
+                .todo(todo)
+                .build();
     }
 
     @Override

@@ -31,9 +31,7 @@ public class TodoController {
             @Valid @RequestBody TodoRequest request
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                TodoResponse.builder()
-                    .todo(todoService.saveTodo(userDetails.getUser(), request))
-                    .build()
+                todoService.saveTodo(userDetails.getUser(), request)
         );
     }
 

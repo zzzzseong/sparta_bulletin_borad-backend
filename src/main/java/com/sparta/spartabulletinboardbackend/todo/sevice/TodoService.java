@@ -16,7 +16,7 @@ public interface TodoService {
      * @param request TODO 생성 요청 정보
      * @return TODO 생성 결과
      * */
-    Todo saveTodo(User user, TodoRequest request);
+    TodoResponse saveTodo(User user, TodoRequest request);
 
     /**
      * TODO 전체 조회

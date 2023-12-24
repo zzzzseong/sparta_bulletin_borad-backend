@@ -6,11 +6,14 @@ import com.sparta.spartabulletinboardbackend.test.TodoTest;
 import com.sparta.spartabulletinboardbackend.todo.dto.TodoRequest;
 import com.sparta.spartabulletinboardbackend.todo.sevice.TodoServiceImpl;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -33,20 +36,54 @@ class TodoControllerTest extends ControllerTest implements TodoTest {
     @MockBean
     private CommentServiceImpl commentService;
 
-    @Test
+    @Nested
     @DisplayName("TODO 생성 요청")
-    void createTodoTest() throws Exception {
-        //given
+    class createTodoTest {
 
-        //when
-        ResultActions action = mockMvc.perform(post("/api/todo")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(TEST_TODO_REQUEST_DTO))
-        );
+        /**
+         * 기존 TodoService에서 Todo를 return했는데 SliceTest를 진행하려다보니 TodoResponse의 생성자로 매개변수인 Todo객체가 null로 전달되는 문제 발생
+         * -> TodoService의 return 타입을 Todo에서 TodoResponse로 변경해서 해결 완료
+         * */
+        @Test
+        @DisplayName("TODO 생성 요청 성공")
+        void createTodo_success() throws Exception {
+            //given
 
-        //then
-        action.andExpect(status().isCreated());
-        verify(todoService, times(1)).saveTodo(eq(TEST_USER), any(TodoRequest.class));
+            //when
+            ResultActions action = mockMvc.perform(post("/api/todo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(TEST_TODO_REQUEST_DTO))
+            );
+
+            //then
+            action.andExpect(status().isCreated());
+
+            //saveTodo로 전달되는 매개변수가 TEST_USER, TodoRequest와 일치하는지 검증
+            verify(todoService, times(1)).saveTodo(eq(TEST_USER), any(TodoRequest.class));
+        }
+
+        @Test
+        @DisplayName("TODO 생성 요청 실패 - 제목이 없는 경우")
+        void createTodo_fail_invalidTitle() throws Exception {
+            //given
+            //제목이 없는 TodoRequest - @Valid 검증 실패
+            TodoRequest request = TodoRequest.builder()
+                    .title("")
+                    .content("content")
+                    .build();
+
+            //when
+            ResultActions action = mockMvc.perform(post("/api/todo")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .accept(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(request))
+            );
+
+            //then
+            action
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
+        }
     }
 }
