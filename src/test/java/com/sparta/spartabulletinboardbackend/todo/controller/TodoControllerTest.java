@@ -13,6 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -56,7 +59,7 @@ class TodoControllerTest extends ControllerTest implements TodoTest {
             ResultActions action = mockMvc.perform(post("/api/todo")
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(TEST_TODO_REQUEST_DTO))
+                    .content(objectMapper.writeValueAsString(TEST_TODO_REQUEST))
             );
 
             //then
@@ -94,18 +97,34 @@ class TodoControllerTest extends ControllerTest implements TodoTest {
     @DisplayName("TODO 단일 조회 요청 성공")
     void readTodo_success() throws Exception {
         //given
-        given(todoService.readTodo(TEST_TODO_ID)).willReturn(TEST_TODO_RESPONSE_DTO);
+        given(todoService.readTodo(TEST_TODO_ID)).willReturn(TEST_TODO_RESPONSE);
 
         //when
         ResultActions action = mockMvc.perform(get("/api/todo/{todoId}", TEST_TODO_ID)
                 .accept(MediaType.APPLICATION_JSON));
 
         //then
-        //status와 값을 잘 매칭해서 반환하는지 테스트
         action
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.username").value(TEST_USER.getUsername()))
             .andExpect(jsonPath("$.title").value(TEST_TODO_TITLE))
             .andExpect(jsonPath("$.content").value(TEST_TODO_CONTENT));
+    }
+
+    @Test
+    @DisplayName("TODO 목록 조회 요청 성공")
+    void readTodoAll_success() throws Exception {
+        //given
+        given(todoService.readAllTodo()).willReturn(Map.of(
+            TEST_USER.getUsername(), List.of(TEST_TODO_RESPONSE),
+            TEST_ANOTHER_USER.getUsername(), List.of(TEST_ANOTHER_TODO_RESPONSE)
+        ));
+
+        //when
+        ResultActions action = mockMvc.perform(get("/api/todo")
+                .accept(MediaType.APPLICATION_JSON));
+
+        //then
+        action.andExpect(status().isOk());
     }
 }
