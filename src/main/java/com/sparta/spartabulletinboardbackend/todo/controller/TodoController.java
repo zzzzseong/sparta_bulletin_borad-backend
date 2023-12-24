@@ -58,9 +58,7 @@ public class TodoController {
                                                    @RequestBody TodoRequest request,
                                                    @PathVariable(name = "todoId") Long todoId) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                TodoResponse.builder()
-                    .todo(todoService.updateTodo(userDetails.getUser(), request, todoId))
-                    .build()
+                    todoService.updateTodo(userDetails.getUser(), request, todoId)
         );
     }
 

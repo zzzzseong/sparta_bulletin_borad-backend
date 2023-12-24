@@ -75,10 +75,12 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public Todo updateTodo(User user, TodoRequest request, Long todoId) {
+    public TodoResponse updateTodo(User user, TodoRequest request, Long todoId) {
         Todo findTodo = getUserTodo(user, todoId);
 
-        return findTodo.update(request);
+        return TodoResponse.builder()
+                .todo(findTodo.update(request))
+                .build();
     }
 
     @Override

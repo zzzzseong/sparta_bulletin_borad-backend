@@ -22,8 +22,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -97,11 +96,15 @@ class TodoControllerTest extends ControllerTest implements TodoTest {
     @DisplayName("TODO 단일 조회 요청 성공")
     void readTodo_success() throws Exception {
         //given
-        given(todoService.readTodo(TEST_TODO_ID)).willReturn(TEST_TODO_RESPONSE);
+        given(todoService.readTodo(TEST_TODO_ID))
+                .willReturn(TEST_TODO_RESPONSE);
 
         //when
         ResultActions action = mockMvc.perform(get("/api/todo/{todoId}", TEST_TODO_ID)
                 .accept(MediaType.APPLICATION_JSON));
+
+        //result json보는 방법
+        System.out.println(action.andReturn().getResponse().getContentAsString());
 
         //then
         action
@@ -127,4 +130,33 @@ class TodoControllerTest extends ControllerTest implements TodoTest {
         //then
         action.andExpect(status().isOk());
     }
+
+    @Nested
+    @DisplayName("TODO 수정 요청")
+    class updateTodoTest {
+
+            @Test
+            @DisplayName("TODO 수정 요청 성공")
+            void updateTodo_success() throws Exception {
+                //given
+                given(todoService.updateTodo(eq(TEST_USER), any(TodoRequest.class), eq(TEST_TODO_ID)))
+                        .willReturn(TEST_TODO_RESPONSE);
+
+                //when
+                ResultActions action = mockMvc.perform(put("/api/todo/{todoId}", TEST_TODO_ID)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(TEST_TODO_REQUEST)));
+
+                //then
+                String responseBody = action.andReturn().getResponse().getContentAsString();
+                System.out.println("Response JSON: " + responseBody);
+
+                action
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.title").value(TEST_TODO_RESPONSE.getTitle()))
+                        .andExpect(jsonPath("$.content").value(TEST_TODO_RESPONSE.getContent()));
+            }
+    }
+
 }

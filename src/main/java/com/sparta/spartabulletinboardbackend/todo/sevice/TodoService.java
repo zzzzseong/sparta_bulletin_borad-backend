@@ -38,7 +38,7 @@ public interface TodoService {
      * @param request TODO 업데이트 요청 정보
      * @return TODO 업데이트 결과
      * */
-    Todo updateTodo(User user, TodoRequest request, Long todoId);
+    TodoResponse updateTodo(User user, TodoRequest request, Long todoId);
 
     /**
      * TODO 완료 업데이트
